@@ -6,6 +6,7 @@ export const realtorsByState = `
   FROM realtors JOIN states ON states.id = realtors.states_id
   WHERE short_name = $1
   `;
+export const newRealtor = `INSERT INTO realtors()`;
 
 // create all queries for the properties
 // get requests
