@@ -1,7 +1,7 @@
 import { db } from "../database/db.js";
 import { states } from "./queries.js";
 
-export const GetAllStates = async (req, res) => {
+export const getAllStates = async (req, res) => {
   try {
     const results = await db.query(states);
     res.status(200).json(results.rows);

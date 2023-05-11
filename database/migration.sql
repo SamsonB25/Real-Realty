@@ -5,8 +5,8 @@ DROP TABLE IF EXISTS properties CASCADE;
 
 CREATE TABLE users(
   id SERIAL PRIMARY KEY,
-  first_name TEXT NOT NULL,
-  last_name TEXT NOT NULL,
+  username VARCHAR(15) NOT NULL,
+  password VARCHAR(255) NOT NULL,
   phone VARCHAR(15) NOT NULL,
   email VARCHAR(255) NOT NULL
 );
@@ -14,9 +14,8 @@ CREATE TABLE users(
 CREATE TABLE states(
     id SERIAL PRIMARY KEY,
     users_id INT REFERENCES users(id),
-    -- realtors_id INT REFERENCES realtors(id),
-    long_name TEXT,
-    short_name CHAR(2)
+    state_name_long TEXT,
+    state_name_short CHAR(2)
     );
 
 CREATE TABLE realtors (
@@ -35,7 +34,7 @@ CREATE TABLE realtors (
 
 CREATE TABLE properties(
   id SERIAL PRIMARY KEY,
-  realtors_id INTEGER REFERENCES realtors(id),
+  realtors_id INTEGER REFERENCES realtors(id) ON UPDATE CASCADE ON DELETE SET NULL,
   states_id INTEGER REFERENCES states(id),
   street_address VARCHAR NOT NULL,
   city TEXT NOT NULL,
@@ -44,5 +43,5 @@ CREATE TABLE properties(
   bed INT NOT NULL,
   bath INT NOT NULL,
   sqft INT NOT NULL,
-  date_posted TIMESTAMP NOT NULL
+  date_posted date NOT NULL
 );

@@ -1,5 +1,6 @@
 import { db } from "../database/db.js";
 import {
+  deleteProperty,
   newProperty,
   properties,
   propertiesById,
@@ -19,9 +20,18 @@ export const getAllProperties = async (req, res) => {
 };
 
 export const getPropertiesById = async (req, res) => {
-  const id = Number(req.params.id);
   try {
+    const id = Number(req.params.id);
+    if (isNaN(id) || id < 0) {
+      res.status(404).json("Property Not Found");
+      return;
+    }
     const results = await db.query(propertiesById, [id]);
+    console.log(results.rowCount);
+    if (results.rowCount === 0) {
+      res.status(404).json("Property Not Found");
+      return;
+    }
     res.status(200).json(results.rows[0]);
   } catch (err) {
     console.error(err);
@@ -30,10 +40,14 @@ export const getPropertiesById = async (req, res) => {
 
 export const getPropertiesBystates = async (req, res) => {
   const state = req.params.states;
+  if (state.length !== 2) {
+    res.status(405).json("Use State's Two Letter Abbriviation");
+    return;
+  }
   try {
     const results = await db.query(propertiesByStates, [state.toUpperCase()]);
     if (results.rowCount === 0) {
-      res.status(404).json("No Properties Found.");
+      res.status(404).json("No Properties In This State");
       return;
     }
     res.status(200).json(results.rows);
@@ -95,7 +109,7 @@ export const addProperty = async (req, res) => {
     res.status(201).json(results.rows[0]);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ Error: "Error creating listing" });
+    res.status(500).json({ Error: "Error Creating Listing" });
   }
 };
 
@@ -125,10 +139,18 @@ export const updateProperties = async (req, res) => {
       sqft,
       id,
     ]);
-    res.status(200).json(results.rows[0]);
+    res.status(202).json(results.rows[0]);
     //error handling
   } catch (err) {
     console.error(err);
     res.status(500).json({ Error: "Error updating property." });
   }
+};
+
+export const deleteProperties = async (req, res) => {
+  const id = Number(req.params.id);
+  try {
+    const results = await db.query(deleteProperty, [id]);
+    res.status(200).json(results.rows[0]);
+  } catch (err) {}
 };
