@@ -1,4 +1,4 @@
-import { db } from "../realServer.js";
+import { db } from "../database/db.js";
 import { states } from "./queries.js";
 
 export const GetAllStates = async (req, res) => {

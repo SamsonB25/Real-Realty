@@ -1,4 +1,4 @@
-import { db } from "../realServer.js";
+import { db } from "../database/db.js";
 import { realtorById, realtors, realtorsByState } from "./queries.js";
 
 export const getAllRealtors = async (req, res) => {

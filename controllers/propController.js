@@ -1,4 +1,4 @@
-import { db } from "../realServer.js";
+import { db } from "../database/db.js";
 import {
   newProperty,
   properties,
