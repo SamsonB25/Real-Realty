@@ -9,3 +9,13 @@ async function getproperties() {
   } catch (error) {}
 }
 getproperties();
+
+async function getRealtors() {
+  try {
+    const response = await axios.get(
+      "https://real-realty.onrender.com/realtors"
+    );
+    console.log(response);
+  } catch (error) {}
+}
+getRealtors();
