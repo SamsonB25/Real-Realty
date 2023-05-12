@@ -1,10 +1,13 @@
 import { db } from "../database/db.js";
+
 import {
   deleteRealtor,
   newRealtor,
+  propertiesById,
   realtorById,
   realtors,
   realtorsByState,
+  updateFK,
   updateRealtor,
 } from "./queries.js";
 
@@ -118,8 +121,10 @@ export const updateRealtors = async (req, res) => {
 export const deleteRealtors = async (req, res) => {
   const id = Number(req.params.id);
   try {
+    const setFKNull = await db.query(updateFK, [id]);
+    console.log(setFKNull);
     const results = await db.query(deleteRealtor, [id]);
-    res.status(200).json(results.rows[0]);
+    res.status(200).json(setFKNull.rows[0]).json(results.rows[0]);
   } catch (err) {
     console.error(err);
     res.status(500).json({ Error: "Error Deleting Realtor." });

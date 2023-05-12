@@ -34,7 +34,7 @@ CREATE TABLE realtors (
 
 CREATE TABLE properties(
   id SERIAL PRIMARY KEY,
-  realtors_id INTEGER REFERENCES realtors(id) ON UPDATE CASCADE ON DELETE SET NULL,
+  realtors_id INTEGER REFERENCES realtors(id) ON DELETE SET NULL,
   states_id INTEGER REFERENCES states(id),
   street_address VARCHAR NOT NULL,
   city TEXT NOT NULL,

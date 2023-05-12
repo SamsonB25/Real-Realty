@@ -4,7 +4,7 @@ export const realtorById = `SELECT * FROM realtors WHERE id = $1`;
 export const realtorsByState = `
   SELECT realtors.first_name, realtors.last_name, realtors.phone, states.state_name_short
   FROM realtors JOIN states ON states.id = realtors.states_id
-  WHERE short_name = $1
+  WHERE state_name_short = $1
   `;
 export const newRealtor = `INSERT INTO realtors( 
   users_id, states_id, first_name, last_name, rating, properties_sold, phone, email)
@@ -16,6 +16,7 @@ export const updateRealtor = `UPDATE realtors
   email = COALESCE( $8, email ) WHERE id =$9 RETURNING *
   `;
 export const deleteRealtor = `DELETE FROM realtors WHERE id = $1 RETURNING *`;
+export const updateFK = `UPDATE properties SET realtors_id = NULL WHERE realtors_id = $1`;
 
 // create all queries for the properties
 // get requests
@@ -29,7 +30,7 @@ WHERE realtors_id = $1`;
 export const propertiesByStates = `
 SELECT * FROM properties
 JOIN states ON states.id = properties.states_id
-WHERE short_name = $1`;
+WHERE state_name_short = $1`;
 //post request
 export const newProperty = `
 INSERT INTO properties(

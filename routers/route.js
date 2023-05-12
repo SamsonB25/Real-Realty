@@ -17,7 +17,6 @@ import {
   updateProperties,
 } from "../controllers/propController.js";
 import { getAllStates } from "../controllers/stateController.js";
-import { deleteRealtor } from "../controllers/queries.js";
 
 const router = Router();
 
