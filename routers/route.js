@@ -11,6 +11,7 @@ import {
   addProperty,
   deleteProperties,
   getAllProperties,
+  getAllPropertiesWithRealtors,
   getPropertiesById,
   getPropertiesByRealtor,
   getPropertiesBystates,
@@ -22,6 +23,7 @@ const router = Router();
 
 // property routes
 router
+  .get("/home", getAllPropertiesWithRealtors)
   .get("/properties", getAllProperties)
   .get("/property/:id", getPropertiesById)
   .get("/properties/:states", getPropertiesBystates)

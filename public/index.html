@@ -17,6 +17,36 @@
       <h1>REAL REALTY</h1>
     </header>
     <main>
+      <button id="add-listing">Add Listing</button>
+
+      <!-- The Modal -->
+      <div id="listing" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <div class="listing-form">
+            Street Address*
+            <input class="street-address" type="text" />
+            City*
+            <input class="city" type="text" />
+            State ID*
+            <input class="state-id" type="text" />
+            Zipcode*
+            <input class="zipcode" type="number" />
+            Price*
+            <input class="price" type="number" />
+            Bed*
+            <input class="bed" type="number" />
+            Bath*
+            <input class="bath" type="number" />
+            Square Footage*
+            <input class="sqft" type="number" />
+            Realtor ID*
+            <input class="realtor-id" type="number" />
+            <button type="submit" id="submit-listing">Submit</button>
+          </div>
+        </div>
+      </div>
       <div id="properties-container"></div>
     </main>
   </body>

@@ -6,12 +6,23 @@ import {
   propertiesById,
   propertiesByRealtor,
   propertiesByStates,
+  propertiesWithRealtors,
   updateProperty,
 } from "./queries.js";
 
 export const getAllProperties = async (req, res) => {
   try {
     const results = await db.query(properties);
+    res.status(200).json(results.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error retrieving properties." });
+  }
+};
+
+export const getAllPropertiesWithRealtors = async (req, res) => {
+  try {
+    const results = await db.query(propertiesWithRealtors);
     res.status(200).json(results.rows);
   } catch (err) {
     console.error(err);
@@ -90,7 +101,7 @@ export const addProperty = async (req, res) => {
       !bath ||
       !sqft
     ) {
-      res.status(404).json({ Error: "Ensure all required fields are filled" });
+      res.status(406).json({ Error: "Ensure all required fields are filled" });
       return;
     }
     const date_posted = new Date().toISOString();

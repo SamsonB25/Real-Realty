@@ -2,7 +2,7 @@ const propertiesContainer = document.getElementById("properties-container");
 
 async function getproperties() {
   try {
-    const response = await axios.get("/properties");
+    const response = await axios.get("/home");
     const data = response.data;
     return data;
   } catch (error) {}
@@ -25,7 +25,7 @@ async function getRealtor(id) {
   } catch (error) {}
 }
 
-const displayProperty = async () => {
+const displayProperties = async () => {
   try {
     const propertyData = await getproperties();
     propertyData.forEach((obj) => {
@@ -52,4 +52,65 @@ const displayProperty = async () => {
   } catch (error) {}
 };
 
-displayProperty();
+displayProperties();
+
+// modal to add listing to properties
+const listingModal = document.getElementById("listing");
+const listingBtn = document.getElementById("add-listing");
+const span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on the button, open the modal
+listingBtn.onclick = function () {
+  listingModal.style.display = "block";
+};
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function () {
+  listingModal.style.display = "none";
+};
+
+// // When the user clicks anywhere outside of the modal, close it
+// window.onclick = function (event) {
+//   if (event.target == listingModal) {
+//     listingModal.style.display = "none";
+//   }
+// };
+
+// submit button that when submited creates listing
+const listingSubmitButton = document.getElementById("submit-listing");
+listingSubmitButton.onclick = () => {
+  const streetAddress = document.querySelector(".street-address").value;
+  const city = document.querySelector(".city").value;
+  const stateId = document.querySelector(".state-id").value;
+  const zipcode = document.querySelector(".zipcode").value;
+  const price = document.querySelector(".price").value;
+  const bed = document.querySelector(".bed").value;
+  const bath = document.querySelector(".bath").value;
+  const sqft = document.querySelector(".sqft").value;
+  const realtorId = document.querySelector(".realtor-id").value;
+
+  const formData = {
+    street_address: streetAddress,
+    city: city,
+    states_id: stateId.toUpperCase(),
+    zipcode: zipcode,
+    price: price,
+    bed: bed,
+    bath: bath,
+    sqft: sqft,
+    realtors_id: realtorId,
+  };
+
+  axios
+    .post("/properties", formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((error) => {
+      alert(error.response.data.Error);
+    });
+};
