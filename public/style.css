@@ -1,0 +1,68 @@
+/* html body */
+body {
+  background-position: top;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  position: absolute;
+  margin-top: 5rem;
+  width: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+main {
+  max-width: 1260px;
+  margin: auto;
+  padding-bottom: 2.5rem;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* properties container */
+#properties-container {
+  display: flex;
+  justify-content: left;
+  flex-wrap: wrap;
+}
+
+.property-card {
+  width: 400px;
+  margin: 10px;
+  background-color: whitesmoke;
+  border-radius: 10px;
+}
+
+.property-card:hover {
+  cursor: pointer;
+  box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
+}
+
+.property-img img {
+  width: 100%;
+  border-radius: 10px 10px 0 0;
+}
+
+.price {
+  font-size: large;
+  font-weight: bolder;
+}
+
+.property-card p {
+  padding-left: 10px;
+}
+
+.property-card-footer {
+  padding-left: 10px;
+  padding-bottom: 5px;
+}
+
+.property-card-footer a:visited {
+  color: black;
+}
+
+.property-card-footer a:hover {
+  box-shadow: 0 3px 5px rgba(33, 33, 33, 0.2);
+}

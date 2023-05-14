@@ -16,11 +16,11 @@ export const updateRealtor = `UPDATE realtors
   email = COALESCE( $8, email ) WHERE id =$9 RETURNING *
   `;
 export const deleteRealtor = `DELETE FROM realtors WHERE id = $1 RETURNING *`;
-export const updateFK = `UPDATE properties SET realtors_id = NULL WHERE realtors_id = $1`;
 
 // create all queries for the properties
 // get requests
-export const properties = "SELECT * FROM properties";
+export const properties =
+  "SELECT * FROM properties JOIN realtors ON realtors.id = properties.realtors_id ORDER BY date_posted";
 export const propertiesById = "SELECT * FROM properties WHERE id = $1";
 export const deleteProperty = `DELETE FROM properties WHERE id = $1 RETURNING *`;
 export const propertiesByRealtor = `
