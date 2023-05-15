@@ -54,34 +54,14 @@ const displayProperties = async () => {
 
 displayProperties();
 
-// modal to add listing to properties
-const listingModal = document.getElementById("listing");
-const listingBtn = document.getElementById("add-listing");
-const span = document.getElementsByClassName("close")[0];
-
-// When the user clicks on the button, open the modal
-listingBtn.onclick = function () {
-  listingModal.style.display = "block";
-};
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function () {
-  listingModal.style.display = "none";
-};
-
-// // When the user clicks anywhere outside of the modal, close it
-// window.onclick = function (event) {
-//   if (event.target == listingModal) {
-//     listingModal.style.display = "none";
-//   }
-// };
-
-// submit button that when submited creates listing
+// Add listing code below
+const listingForm = document.getElementsByClassName("listing-form");
 const listingSubmitButton = document.getElementById("submit-listing");
-listingSubmitButton.onclick = () => {
+listingForm.onsubmit = async (e) => {
+  e.preventDefault();
   const streetAddress = document.querySelector(".street-address").value;
   const city = document.querySelector(".city").value;
-  const stateId = document.querySelector(".state-id").value;
+  const stateId = document.querySelector(".state-id").value.toUpperCase();
   const zipcode = document.querySelector(".zipcode").value;
   const price = document.querySelector(".price").value;
   const bed = document.querySelector(".bed").value;
@@ -92,7 +72,7 @@ listingSubmitButton.onclick = () => {
   const formData = {
     street_address: streetAddress,
     city: city,
-    states_id: stateId.toUpperCase(),
+    states_id: stateId,
     zipcode: zipcode,
     price: price,
     bed: bed,
@@ -101,16 +81,96 @@ listingSubmitButton.onclick = () => {
     realtors_id: realtorId,
   };
 
+  // debugger;
   axios
-    .post("/properties", formData, {
-      headers: {
-        "Content-Type": "application/json",
+    .post(
+      "/properties",
+      formData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
-    })
+      alert("Property added")
+    )
     .then((res) => {
-      console.log(res);
+      console.log(res.data);
+    })
+    .then(location.reload())
+    .catch((error) => {
+      console.log(error.response);
+    });
+  listingForm.reset();
+};
+
+// modal to add listing to properties
+const aListingModal = document.getElementById("a-listing");
+const aListingBtn = document.getElementById("add-listing");
+const aSpan = document.getElementsByClassName("a-close")[0];
+
+// When the user clicks on the button, open the modal
+aListingBtn.onclick = function () {
+  aListingModal.style.display = "block";
+};
+
+// When the user clicks on <span> (x), close the modal
+aSpan.onclick = function () {
+  aListingModal.style.display = "none";
+};
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function (event) {
+  if (event.target == aListingModal) {
+    aListingModal.style.display = "none";
+  }
+};
+// Delete listing code below
+const delForm = document.getElementsByClassName("delete-listing-form");
+const listingRemoveButton = document.getElementById("remove-listing");
+listingRemoveButton.onclick = async (e) => {
+  e.preventDefault();
+  const streetAddress = document.querySelector(".d-street-address").value;
+  const city = document.querySelector(".d-city").value;
+  const stateId = document.querySelector(".d-state-id").value.toUpperCase();
+
+  const formData = {
+    street_address: streetAddress,
+    city: city,
+    states_id: stateId,
+  };
+
+  axios
+    .delete(
+      `/properties/${streetAddress}/${city}/${stateId}`,
+      formData,
+      alert("property Removed")
+    )
+    .then((res) => {
+      location.reload();
     })
     .catch((error) => {
-      alert(error.response.data.Error);
+      console.log(error.response.data.Error);
     });
+  delForm.reset();
+};
+
+const dListingModal = document.getElementById("d-listing");
+const dListingBtn = document.getElementById("delete-listing");
+const dSpan = document.getElementsByClassName("d-close")[0];
+
+// When the user clicks on the button, open the modal
+dListingBtn.onclick = function () {
+  dListingModal.style.display = "block";
+};
+
+// When the user clicks on <span> (x), close the modal
+dSpan.onclick = function () {
+  dListingModal.style.display = "none";
+};
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function (event) {
+  if (event.target == dListingModal) {
+    dListingModal.style.display = "none";
+  }
 };

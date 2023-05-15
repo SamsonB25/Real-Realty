@@ -14,39 +14,79 @@
   </head>
   <body>
     <header>
-      <h1>REAL REALTY</h1>
+      <nav>
+        <h1>REAL REALTY</h1>
+        <div class="nav-buttons">
+          <button id="add-listing">Add Listing</button>
+          <button id="delete-listing">Delete Listing</button>
+        </div>
+      </nav>
     </header>
     <main>
-      <button id="add-listing">Add Listing</button>
-
       <!-- The Modal -->
-      <div id="listing" class="modal">
+      <div id="a-listing" class="modal">
         <!-- Modal content -->
         <div class="modal-content">
-          <span class="close">&times;</span>
-          <div class="listing-form">
+          <span class="a-close">&times;</span>
+          <form action="#" class="listing-form">
+            <h3>Fill field's to add property.</h3>
             Street Address*
-            <input class="street-address" type="text" />
+            <input class="street-address" type="text" required />
             City*
-            <input class="city" type="text" />
+            <input class="city" name="city" type="text" required />
             State ID*
-            <input class="state-id" type="text" />
+            <input class="state-id" type="text" required />
             Zipcode*
-            <input class="zipcode" type="number" />
+            <input class="zipcode" type="number" required />
             Price*
-            <input class="price" type="number" />
+            <input class="price" type="number" required />
             Bed*
-            <input class="bed" type="number" />
+            <input class="bed" type="number" required />
             Bath*
-            <input class="bath" type="number" />
+            <input class="bath" type="number" required />
             Square Footage*
-            <input class="sqft" type="number" />
+            <input class="sqft" type="number" required />
             Realtor ID*
-            <input class="realtor-id" type="number" />
+            <input class="realtor-id" type="number" required />
             <button type="submit" id="submit-listing">Submit</button>
-          </div>
+          </form>
         </div>
       </div>
+
+      <div id="d-listing" class="modal">
+        <div class="modal-content">
+          <span class="d-close">&times;</span>
+          <form
+            action="/delete-listing"
+            method="POST"
+            class="delete-listing-form"
+          >
+            <h3>Address to delete</h3>
+            <label for="d-street-address">Street Address*</label>
+            <input
+              id="d-street-address"
+              class="d-street-address"
+              type="text"
+              required
+            />
+
+            <label for="d-city">City*</label>
+            <input
+              id="d-city"
+              class="d-city"
+              name="city"
+              type="text"
+              required
+            />
+
+            <label for="d-state-id">State ID*</label>
+            <input id="d-state-id" class="d-state-id" type="text" required />
+
+            <button type="submit" id="remove-listing">Submit</button>
+          </form>
+        </div>
+      </div>
+
       <div id="properties-container"></div>
     </main>
   </body>

@@ -159,9 +159,18 @@ export const updateProperties = async (req, res) => {
 };
 
 export const deleteProperties = async (req, res) => {
-  const id = Number(req.params.id);
+  const streetAddress = req.params.street_address;
+  const city = req.params.city;
+  const statesId = req.params.states_id;
   try {
-    const results = await db.query(deleteProperty, [id]);
+    const results = await db.query(deleteProperty, [
+      streetAddress,
+      city,
+      statesId,
+    ]);
     res.status(200).json(results.rows[0]);
-  } catch (err) {}
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ Error: "Error removing property." });
+  }
 };

@@ -21,9 +21,9 @@ export const deleteRealtor = `DELETE FROM realtors WHERE id = $1 RETURNING *`;
 // get requests
 export const properties = "SELECT * FROM properties";
 export const propertiesWithRealtors =
-  "SELECT * FROM properties JOIN realtors ON realtors.id = properties.realtors_id ORDER BY date_posted";
+  "SELECT * FROM realtors JOIN properties ON realtors.id = properties.realtors_id ORDER BY date_posted";
 export const propertiesById = "SELECT * FROM properties WHERE id = $1";
-export const deleteProperty = `DELETE FROM properties WHERE id = $1 RETURNING *`;
+export const deleteProperty = `DELETE FROM properties WHERE street_address = $1 AND city = $2 AND states_id = $3 RETURNING *`;
 export const propertiesByRealtor = `
 SELECT * FROM properties
 JOIN realtors ON realtors.id = properties.realtors_id

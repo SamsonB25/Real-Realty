@@ -1,3 +1,7 @@
+* {
+  margin: 0;
+  padding: 0;
+}
 /* html body */
 body {
   background-position: top;
@@ -5,10 +9,18 @@ body {
   background-size: cover;
   background-attachment: fixed;
   position: absolute;
-  margin-top: 5rem;
   width: 100%;
-  padding-left: 10px;
-  padding-right: 10px;
+}
+
+nav {
+  display: flex;
+  background-color: crimson;
+  height: 2.5rem;
+  justify-content: space-around;
+}
+
+.nav-buttons {
+  display: flex;
 }
 
 main {
@@ -84,6 +96,8 @@ a {
 
 /* Modal Content/Box */
 .modal-content {
+  min-width: 240px;
+  max-width: 240px;
   background-color: #fefefe;
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
@@ -92,21 +106,42 @@ a {
 }
 
 /* The Close Button */
-.close {
+.a-close {
   color: #aaa;
   float: right;
   font-size: 28px;
   font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
+.a-close:hover,
+.a-close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.d-close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.d-close:hover,
+.d-close:focus {
   color: black;
   text-decoration: none;
   cursor: pointer;
 }
 
 .listing-form input {
+  display: flex;
+  width: 175px;
+  padding-bottom: 5px;
+  margin: 5px;
+}
+
+.delete-listing-form input {
   display: flex;
   width: 175px;
   padding-bottom: 5px;
