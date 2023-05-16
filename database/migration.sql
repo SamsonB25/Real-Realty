@@ -42,5 +42,6 @@ CREATE TABLE properties(
   bed INT NOT NULL,
   bath INT NOT NULL,
   sqft INT NOT NULL,
+  images TEXT,
   date_posted date NOT NULL
 );
