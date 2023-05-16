@@ -29,10 +29,13 @@ const displayProperties = async () => {
   try {
     const propertyData = await getproperties();
     propertyData.forEach((obj) => {
+      if (obj.images === null) {
+        obj.images = "/images/no-image.jpg";
+      }
       const html = `
     <div class="property-card">
       <div class="property-img">
-        <img src="https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg">
+        <img src="${obj.images}">
       </div>
       <div class="property-info">
         <p><span class="price">${obj.price}</span>
