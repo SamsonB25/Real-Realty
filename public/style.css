@@ -127,13 +127,6 @@ a {
   font-weight: bold;
 }
 
-.d-close:hover,
-.d-close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-
 .listing-form input {
   display: flex;
   width: 175px;
@@ -141,7 +134,35 @@ a {
   margin: 5px;
 }
 
+.d-close:hover,
+.d-close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
 .delete-listing-form input {
+  display: flex;
+  width: 175px;
+  padding-bottom: 5px;
+  margin: 5px;
+}
+
+.p-close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+#p-close:hover,
+#p-close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#update-form input {
   display: flex;
   width: 175px;
   padding-bottom: 5px;

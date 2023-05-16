@@ -19,6 +19,7 @@
         <div class="nav-buttons">
           <button id="add-listing">Add Listing</button>
           <button id="delete-listing">Delete Listing</button>
+          <button id="patch-listing">Patch Listing</button>
         </div>
       </nav>
     </header>
@@ -31,23 +32,25 @@
           <form action="#" class="listing-form">
             <h3>Fill field's to add property.</h3>
             Street Address*
-            <input class="street-address" type="text" required />
+            <input id="street-address" type="text" required />
             City*
-            <input class="city" name="city" type="text" required />
+            <input id="city" name="city" type="text" required />
             State ID*
-            <input class="state-id" type="text" required />
+            <input id="state-id" type="text" required />
             Zipcode*
-            <input class="zipcode" type="number" required />
+            <input id="zipcode" type="number" required />
             Price*
-            <input class="price" type="number" required />
+            <input id="price" type="number" required />
             Bed*
-            <input class="bed" type="number" required />
+            <input id="bed" type="number" required />
             Bath*
-            <input class="bath" type="number" required />
+            <input id="bath" type="number" required />
             Square Footage*
-            <input class="sqft" type="number" required />
+            <input id="sqft" type="number" required />
+            Image URL(Optional)
+            <input id="img" type="text" />
             Realtor ID*
-            <input class="realtor-id" type="number" required />
+            <input id="realtor-id" type="number" required />
             <button type="submit" id="submit-listing">Submit</button>
           </form>
         </div>
@@ -67,18 +70,44 @@
             />
 
             <label for="d-city">City*</label>
-            <input
-              id="d-city"
-              class="d-city"
-              name="city"
-              type="text"
-              required
-            />
+            <input id="d-city" class="d-city" type="text" required />
 
             <label for="d-state-id">State ID*</label>
             <input id="d-state-id" class="d-state-id" type="text" required />
 
             <button type="submit" id="remove-listing">Submit</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- The Modal -->
+      <div id="p-listing" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+          <span class="p-close">&times;</span>
+          <form action="#" id="update-form">
+            <h3>Update Listing</h3>
+            Street Address*
+            <input id="p-street-address" type="text" required />
+            City*
+            <input id="p-city" name="city" type="text" required />
+            State ID*
+            <input id="p-state-id" type="text" required />
+            Zipcode
+            <input id="p-zipcode" type="number" />
+            Price
+            <input id="p-price" type="number" />
+            Bed
+            <input id="p-bed" type="number" />
+            Bath
+            <input id="p-bath" type="number" />
+            Square Footage
+            <input id="p-sqft" type="number" />
+            Image
+            <input id="p-img" type="text" />
+            Realtor ID
+            <input id="p-realtor-id" type="number" />
+            <button type="submit" id="patch-listing">Submit</button>
           </form>
         </div>
       </div>

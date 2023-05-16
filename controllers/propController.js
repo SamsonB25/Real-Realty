@@ -127,7 +127,6 @@ export const addProperty = async (req, res) => {
 };
 
 export const updateProperties = async (req, res) => {
-  const id = Number(req.params.id);
   try {
     const {
       realtors_id,
@@ -139,6 +138,7 @@ export const updateProperties = async (req, res) => {
       bed,
       bath,
       sqft,
+      images,
     } = req.body;
     const results = await db.query(updateProperty, [
       realtors_id,
@@ -150,9 +150,13 @@ export const updateProperties = async (req, res) => {
       bed,
       bath,
       sqft,
-      id,
+      images,
     ]);
+    if (res.rowCount === 0) {
+      res.status(304).json("not real");
+    }
     res.status(202).json(results.rows[0]);
+
     //error handling
   } catch (err) {
     console.error(err);

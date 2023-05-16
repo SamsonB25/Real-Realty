@@ -58,19 +58,20 @@ const displayProperties = async () => {
 displayProperties();
 
 // Add listing code below
-const listingForm = document.getElementsByClassName("listing-form");
+const listingForm = document.querySelector(".listing-form");
 const listingSubmitButton = document.getElementById("submit-listing");
-listingForm.onsubmit = async (e) => {
+listingSubmitButton.onclick = async (e) => {
   e.preventDefault();
-  const streetAddress = document.querySelector(".street-address").value;
-  const city = document.querySelector(".city").value;
-  const stateId = document.querySelector(".state-id").value.toUpperCase();
-  const zipcode = document.querySelector(".zipcode").value;
-  const price = document.querySelector(".price").value;
-  const bed = document.querySelector(".bed").value;
-  const bath = document.querySelector(".bath").value;
-  const sqft = document.querySelector(".sqft").value;
-  const realtorId = document.querySelector(".realtor-id").value;
+  const streetAddress = document.querySelector("#street-address").value;
+  const city = document.querySelector("#city").value;
+  const stateId = document.querySelector("#state-id").value.toUpperCase();
+  const zipcode = document.querySelector("#zipcode").value;
+  const price = document.querySelector("#price").value;
+  const bed = document.querySelector("#bed").value;
+  const bath = document.querySelector("#bath").value;
+  const sqft = document.querySelector("#sqft").value;
+  const image = document.querySelector("#img").value;
+  const realtorId = document.querySelector("#realtor-id").value;
 
   const formData = {
     street_address: streetAddress,
@@ -81,12 +82,16 @@ listingForm.onsubmit = async (e) => {
     bed: bed,
     bath: bath,
     sqft: sqft,
-    images: "/images/no-image.jpg",
+    images: image,
     realtors_id: realtorId,
   };
 
-  await axios
-    .post("/properties", formData, {
+  if (formData.images === "") {
+    formData.images = null;
+  }
+
+  axios
+    .post("/properties", formData, console.log(formData), {
       headers: {
         "Content-Type": "application/json",
       },
@@ -97,8 +102,8 @@ listingForm.onsubmit = async (e) => {
     .catch((error) => {
       console.log(error.response);
     });
-  alert("Property added");
   listingForm.reset();
+  location.reload();
 };
 
 // modal to add listing to properties
@@ -107,29 +112,29 @@ const aListingBtn = document.getElementById("add-listing");
 const aSpan = document.getElementsByClassName("a-close")[0];
 
 // When the user clicks on the button, open the modal
-aListingBtn.onclick = function () {
+aListingBtn.onclick = () => {
   aListingModal.style.display = "block";
 };
 
 // When the user clicks on <span> (x), close the modal
-aSpan.onclick = function () {
+aSpan.onclick = () => {
   aListingModal.style.display = "none";
 };
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function (event) {
+window.onclick = (event) => {
   if (event.target == aListingModal) {
     aListingModal.style.display = "none";
   }
 };
 // Delete listing code below
-const delForm = document.getElementsByClassName("delete-listing-form");
-const listingRemoveButton = document.getElementById("remove-listing");
-listingRemoveButton.onsubmit = async (e) => {
+const delForm = document.querySelector(".delete-listing-form");
+const listingRemoveButton = document.querySelector("#remove-listing");
+listingRemoveButton.onclick = async (e) => {
   e.preventDefault();
-  const streetAddress = document.querySelector(".d-street-address").value;
-  const city = document.querySelector(".d-city").value;
-  const stateId = document.querySelector(".d-state-id").value.toUpperCase();
+  const streetAddress = document.querySelector("#d-street-address").value;
+  const city = document.querySelector("#d-city").value;
+  const stateId = document.querySelector("#d-state-id").value.toUpperCase();
 
   const formData = {
     street_address: streetAddress,
@@ -138,12 +143,11 @@ listingRemoveButton.onsubmit = async (e) => {
   };
 
   axios
-    .delete(
-      `/properties/${streetAddress}/${city}/${stateId}`,
-      formData,
-      alert("property Removed")
-    )
+    .delete(`/properties/${streetAddress}/${city}/${stateId}`, formData)
     .then((res) => {
+      alert(`Removed Property Located at\n
+      ${formData.street_address},${formData.city} ${formData.states_id}`);
+      console.log(res);
       location.reload();
     })
     .catch((error) => {
@@ -157,18 +161,98 @@ const dListingBtn = document.getElementById("delete-listing");
 const dSpan = document.getElementsByClassName("d-close")[0];
 
 // When the user clicks on the button, open the modal
-dListingBtn.onclick = function () {
+dListingBtn.onclick = () => {
   dListingModal.style.display = "block";
 };
 
 // When the user clicks on <span> (x), close the modal
-dSpan.onclick = function () {
+dSpan.onclick = () => {
   dListingModal.style.display = "none";
 };
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function (event) {
+window.onclick = (event) => {
   if (event.target == dListingModal) {
     dListingModal.style.display = "none";
+  }
+};
+
+// Update listing code below
+const updateForm = document.querySelector("#update-form");
+const listingPatchButton = document.querySelector("#patch-listing");
+listingPatchButton.onclick = async (e) => {
+  debugger;
+  e.preventDefault();
+  const streetAddress = document.querySelector("#p-street-address").value;
+  const city = document.querySelector("#p-city").value;
+  const stateId = document.querySelector("#p-state-id").value.toUpperCase();
+  const zipcode = document.querySelector("#p-zipcode").value;
+  const price = document.querySelector("#p-price").value;
+  const bed = document.querySelector("#p-bed").value;
+  const bath = document.querySelector("#p-bath").value;
+  const sqft = document.querySelector("#p-sqft").value;
+  const image = document.querySelector("#p-img").value;
+  const realtorId = document.querySelector("#p-realtor-id").value;
+
+  const formData = {
+    street_address: streetAddress,
+    city: city,
+    states_id: stateId,
+    zipcode: zipcode,
+    price: price,
+    bed: bed,
+    bath: bath,
+    sqft: sqft,
+    images: image,
+    realtors_id: realtorId,
+  };
+  console.log(formData);
+
+  if (formData.images === "") {
+    formData.images = null;
+  }
+
+  axios
+    .patch(
+      `/properties/${streetAddress}/${city}/${stateId}`,
+      formData,
+
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+    .then((res) => {
+      alert(`Removed Property Located at\n
+      ${formData.street_address},${formData.city} ${formData.states_id}`);
+      console.log(res.data);
+    })
+    .catch((error) => {
+      console.log(error.response);
+    });
+  updateForm.reset();
+  // location.reload();
+};
+
+// modal to add listing to properties
+const pListingModal = document.getElementById("p-listing");
+const pListingBtn = document.getElementById("patch-listing");
+const pSpan = document.getElementsByClassName("p-close")[0];
+
+// When the user clicks on the button, open the modal
+pListingBtn.onclick = () => {
+  pListingModal.style.display = "block";
+};
+
+// When the user clicks on <span> (x), close the modal
+pSpan.onclick = () => {
+  pListingModal.style.display = "none";
+};
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = (event) => {
+  if (event.target == pListingModal) {
+    pListingModal.style.display = "none";
   }
 };

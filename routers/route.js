@@ -31,7 +31,7 @@ router
 
 router.post("/properties", addProperty);
 
-router.patch("/properties/:id", updateProperties);
+router.patch("/properties/:street_address/:city/:states_id", updateProperties);
 
 router.delete("/properties/:street_address/:city/:states_id", deleteProperties);
 // realtor routes

@@ -37,14 +37,14 @@ export const newProperty = `
 INSERT INTO properties(
   realtors_id, states_id, street_address, city, zipcode, price, bed, bath, sqft, images, date_posted
   )
-VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
 RETURNING *`;
 // patch request
 export const updateProperty = `UPDATE properties
 SET realtors_id = COALESCE( $1, realtors_id ), states_id = COALESCE( $2, states_id ),
 street_address = COALESCE( $3, street_address ), city = COALESCE( $4, city ),
 zipcode = COALESCE( $5, zipcode ), price = COALESCE( $6, price ), bed = COALESCE($7, bed),
-bath = COALESCE( $8, bath ), sqft = COALESCE( $9, sqft ) WHERE id =$10
+bath = COALESCE( $8, bath ), images = COALESCE($9, images), sqft = COALESCE( $10, sqft ) WHERE states_id = $2 AND street_address = $3 AND city = $4  
 RETURNING *
 `;
 
