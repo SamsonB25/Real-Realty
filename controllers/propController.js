@@ -91,6 +91,7 @@ export const addProperty = async (req, res) => {
       bed,
       bath,
       sqft,
+      images,
     } = req.body;
     if (
       !street_address ||
@@ -115,6 +116,7 @@ export const addProperty = async (req, res) => {
       bed,
       bath,
       sqft,
+      images,
       date_posted,
     ]);
     res.status(201).json(results.rows[0]);

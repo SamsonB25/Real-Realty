@@ -81,28 +81,23 @@ listingForm.onsubmit = async (e) => {
     bed: bed,
     bath: bath,
     sqft: sqft,
+    images: "/images/no-image.jpg",
     realtors_id: realtorId,
   };
 
-  // debugger;
-  axios
-    .post(
-      "/properties",
-      formData,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
+  await axios
+    .post("/properties", formData, {
+      headers: {
+        "Content-Type": "application/json",
       },
-      alert("Property added")
-    )
+    })
     .then((res) => {
       console.log(res.data);
     })
-    .then(location.reload())
     .catch((error) => {
       console.log(error.response);
     });
+  alert("Property added");
   listingForm.reset();
 };
 
@@ -130,7 +125,7 @@ window.onclick = function (event) {
 // Delete listing code below
 const delForm = document.getElementsByClassName("delete-listing-form");
 const listingRemoveButton = document.getElementById("remove-listing");
-listingRemoveButton.onclick = async (e) => {
+listingRemoveButton.onsubmit = async (e) => {
   e.preventDefault();
   const streetAddress = document.querySelector(".d-street-address").value;
   const city = document.querySelector(".d-city").value;

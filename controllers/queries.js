@@ -35,9 +35,9 @@ WHERE state_name_short = $1`;
 //post request
 export const newProperty = `
 INSERT INTO properties(
-  realtors_id, states_id, street_address, city, zipcode, price, bed, bath, sqft, date_posted
+  realtors_id, states_id, street_address, city, zipcode, price, bed, bath, sqft, images, date_posted
   )
-VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
 RETURNING *`;
 // patch request
 export const updateProperty = `UPDATE properties
