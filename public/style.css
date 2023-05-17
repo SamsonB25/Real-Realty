@@ -148,6 +148,23 @@ nav {
 }
 
 @media (max-width: 768px) {
+  body {
+    font-family: Asap;
+    background-color: #2f2f2f;
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    position: absolute;
+    width: 100%;
+    overflow-x: hidden;
+    margin: 0;
+  }
+
+  #page-container {
+    position: relative;
+    min-height: 100vh;
+  }
   .nav-items {
     flex-direction: row;
     align-items: flex-start;
