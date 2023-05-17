@@ -153,6 +153,7 @@ nav {
     align-items: flex-start;
     padding: 4px;
     min-width: 0px;
+    width: 100%;
   }
 
   #logo {
