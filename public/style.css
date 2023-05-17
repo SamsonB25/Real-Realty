@@ -147,7 +147,19 @@ nav {
   display: block;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 950px) {
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  main {
+    max-width: 950px;
+    margin: auto;
+    padding-bottom: 2.5rem;
+  }
+  #properties-container {
+    width: 100%;
+  }
   body {
     font-family: Asap;
     background-color: #2f2f2f;
@@ -185,6 +197,18 @@ nav {
 
   .login {
     bottom: 0;
+  }
+  .footer {
+    text-align: left;
+    padding: 5%;
+  }
+  .footer .row ul li {
+    display: block;
+    margin: 10px 0px;
+    text-align: left;
+  }
+  .footer .row a i {
+    margin: 0% 3%;
   }
 }
 /* properties container */
@@ -365,19 +389,4 @@ nav {
 .footer .row a i {
   font-size: 2em;
   margin: 0% 1%;
-}
-
-@media (max-width: 720px) {
-  .footer {
-    text-align: left;
-    padding: 5%;
-  }
-  .footer .row ul li {
-    display: block;
-    margin: 10px 0px;
-    text-align: left;
-  }
-  .footer .row a i {
-    margin: 0% 3%;
-  }
 }
