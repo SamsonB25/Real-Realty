@@ -14,6 +14,11 @@ body {
   position: absolute;
   width: 100%;
 }
+.slogan {
+  text-align: center;
+  padding-top: 10px;
+  color: whitesmoke;
+}
 
 nav {
   display: flex;
@@ -61,6 +66,14 @@ a {
   width: 6.2rem;
 }
 
+#add-listing:hover {
+  opacity: 80%;
+}
+
+#add-listing:active {
+  opacity: 60%;
+}
+
 #delete-listing {
   background-color: black;
   color: whitesmoke;
@@ -68,11 +81,27 @@ a {
   width: 6.2rem;
 }
 
+#delete-listing:hover {
+  opacity: 80%;
+}
+
+#delete-listing:active {
+  opacity: 60%;
+}
+
 #patch-listing {
   background-color: black;
   color: whitesmoke;
   border-radius: 2rem;
   width: 6.2rem;
+}
+
+#patch-listing:hover {
+  opacity: 80%;
+}
+
+#patch-listing:active {
+  opacity: 60%;
 }
 /* properties container */
 #properties-container {
