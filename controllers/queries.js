@@ -31,7 +31,8 @@ WHERE realtors_id = $1`;
 export const propertiesByStates = `
 SELECT * FROM properties
 JOIN states ON states.id = properties.states_id
-WHERE state_name_short = $1`;
+JOIN realtors ON states.id = realtors.states_id
+WHERE states.id = $1`;
 //post request
 export const newProperty = `
 INSERT INTO properties(
@@ -44,7 +45,7 @@ export const updateProperty = `UPDATE properties
 SET realtors_id = COALESCE( $1, realtors_id ), states_id = COALESCE( $2, states_id ),
 street_address = COALESCE( $3, street_address ), city = COALESCE( $4, city ),
 zipcode = COALESCE( $5, zipcode ), price = COALESCE( $6, price ), bed = COALESCE($7, bed),
-bath = COALESCE( $8, bath ), images = COALESCE($9, images), sqft = COALESCE( $10, sqft ) WHERE states_id = $2 AND street_address = $3 AND city = $4  
+bath = COALESCE( $8, bath ), sqft = COALESCE( $9, sqft ), images = COALESCE($10, images)  WHERE states_id = $2 AND street_address = $3 AND city = $4  
 RETURNING *
 `;
 

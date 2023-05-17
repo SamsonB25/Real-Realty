@@ -9,6 +9,7 @@ import {
   propertiesWithRealtors,
   updateProperty,
 } from "./queries.js";
+import { DateTime } from "luxon";
 
 export const getAllProperties = async (req, res) => {
   try {

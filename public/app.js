@@ -5,7 +5,19 @@ async function getproperties() {
     const response = await axios.get("/home");
     const data = response.data;
     return data;
-  } catch (error) {}
+  } catch (error) {
+    console.error(err);
+  }
+}
+
+async function getPropertiesByState(stateID) {
+  try {
+    const response = await axios.get(`/properties/${stateID}`);
+    const data = response.data;
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 async function getRealtors() {
@@ -15,20 +27,26 @@ async function getRealtors() {
     return data;
   } catch (error) {}
 }
-
+// gets specific realtors
 async function getRealtor(id) {
   try {
     const response = await axios.get(`/realtor/${id}`);
     const data = response.data;
     console.log(data);
     return data;
-  } catch (error) {}
+  } catch (error) {
+    console.error(err);
+  }
 }
 
 const displayProperties = async () => {
   try {
     const propertyData = await getproperties();
     propertyData.forEach((obj) => {
+      obj.date_posted = luxon.DateTime.fromISO(obj.date_posted).toFormat(
+        "dd LLL yyyy"
+      );
+
       if (obj.images === null) {
         obj.images = "/images/no-image.jpg";
       }
@@ -54,11 +72,56 @@ const displayProperties = async () => {
     });
   } catch (error) {}
 };
-
+// home screen loads all properties
 displayProperties();
+// clicking logo also shows all properties
+const logo = document.querySelector("#logo");
+logo.addEventListener("click", async () => {
+  propertiesContainer.innerHTML = "";
+  displayProperties();
+});
+// selector drop down search shows properties by state
+const stateSelect = document.getElementById("by-state");
+stateSelect.addEventListener("change", async (e) => {
+  try {
+    propertiesContainer.innerHTML = "";
+    const selectedState = e.target.value;
+    const displayState = await getPropertiesByState(selectedState);
+    displayState.forEach((obj) => {
+      obj.date_posted = luxon.DateTime.fromISO(obj.date_posted).toFormat(
+        "dd LLL yyyy"
+      );
+
+      if (obj.images === null) {
+        obj.images = "/images/no-image.jpg";
+      }
+      const html = `
+    <div class="property-card">
+      <div class="property-img">
+        <img src="${obj.images}">
+      </div>
+      <div class="property-info">
+        <p><span class="price">${obj.price}</span>
+        </br>${obj.bed} Bed  ${obj.bath} Bath   ${obj.sqft} Sqft
+        </br>${obj.street_address}, ${obj.city}, ${obj.states_id} ${obj.zipcode}
+        </br>${obj.date_posted}</p>
+          <div class="property-card-footer">
+            Realtor:
+            <a class="realtor-link" href="">
+               ${obj.first_name} ${obj.last_name}
+            </a>
+          </div>  
+      </div>
+    </div>`;
+      propertiesContainer.insertAdjacentHTML("afterbegin", html);
+    });
+  } catch (err) {
+    console.error(err);
+  }
+});
 
 // Add listing code below
-const listingForm = document.querySelector(".listing-form");
+const listingForm = document.querySelector("#listing-form");
 const listingSubmitButton = document.getElementById("submit-listing");
 listingSubmitButton.onclick = async (e) => {
   e.preventDefault();
@@ -89,7 +152,6 @@ listingSubmitButton.onclick = async (e) => {
   if (formData.images === "") {
     formData.images = null;
   }
-
   axios
     .post("/properties", formData, console.log(formData), {
       headers: {
@@ -127,6 +189,7 @@ window.onclick = (event) => {
     aListingModal.style.display = "none";
   }
 };
+
 // Delete listing code below
 const delForm = document.querySelector(".delete-listing-form");
 const listingRemoveButton = document.querySelector("#remove-listing");
@@ -145,14 +208,14 @@ listingRemoveButton.onclick = async (e) => {
   axios
     .delete(`/properties/${streetAddress}/${city}/${stateId}`, formData)
     .then((res) => {
-      alert(`Removed Property Located at\n
+      alert(`Removed Property Located at:\n
       ${formData.street_address},${formData.city} ${formData.states_id}`);
       console.log(res);
-      location.reload();
     })
     .catch((error) => {
       console.log(error.response.data.Error);
     });
+  location.reload();
   delForm.reset();
 };
 
@@ -179,9 +242,8 @@ window.onclick = (event) => {
 
 // Update listing code below
 const updateForm = document.querySelector("#update-form");
-const listingPatchButton = document.querySelector("#patch-listing");
+const listingPatchButton = document.querySelector("#update-listing");
 listingPatchButton.onclick = async (e) => {
-  debugger;
   e.preventDefault();
   const streetAddress = document.querySelector("#p-street-address").value;
   const city = document.querySelector("#p-city").value;
@@ -206,12 +268,16 @@ listingPatchButton.onclick = async (e) => {
     images: image,
     realtors_id: realtorId,
   };
-  console.log(formData);
-
+  debugger;
   if (formData.images === "") {
     formData.images = null;
   }
-
+  for (let val in formData) {
+    if (formData[val] === "") {
+      formData[val] = undefined;
+    }
+  }
+  console.log(formData);
   axios
     .patch(
       `/properties/${streetAddress}/${city}/${stateId}`,
@@ -224,15 +290,15 @@ listingPatchButton.onclick = async (e) => {
       }
     )
     .then((res) => {
-      alert(`Removed Property Located at\n
+      alert(`Updated Property Located at:\n
       ${formData.street_address},${formData.city} ${formData.states_id}`);
       console.log(res.data);
+      location.reload();
     })
     .catch((error) => {
       console.log(error.response);
     });
   updateForm.reset();
-  // location.reload();
 };
 
 // modal to add listing to properties
