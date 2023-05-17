@@ -28,11 +28,8 @@ body {
   color: whitesmoke;
 }
 
-nav {
-  display: flex;
-  background-color: crimson;
-  height: 4rem;
-  justify-content: space-around;
+#logo {
+  max-width: 60px;
 }
 
 main {
@@ -43,28 +40,47 @@ main {
 
 a {
   text-decoration: none;
+  color: whitesmoke;
 }
 
+.login {
+  color: whitesmoke;
+  margin-top: 2.2rem;
+}
+.login :visited {
+  color: whitesmoke;
+  text-decoration: none;
+}
 /* nav items */
+nav {
+  display: flex;
+
+  background-color: crimson;
+  height: 4rem;
+  justify-content: space-around;
+}
 .select {
-  margin-top: auto;
-  margin-bottom: 4px;
+  margin-top: 2.4rem;
+
   color: whitesmoke;
 }
 
 .nav-items {
   display: flex;
-  width: 1220px;
-  max-width: 1220px;
+  align-items: center;
   justify-content: space-between;
+  width: 1240px;
+  max-width: 1240px;
 }
 
 .nav-buttons {
-  order: 2;
-  width: 400px;
-  display: flex;
-  justify-content: space-between;
-  margin: 4px;
+  display: none;
+  position: absolute;
+  row-gap: 2px;
+  background-color: rgba(0, 0, 0, 0.7);
+  min-width: 0px;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  z-index: 1;
 }
 
 #add-listing {
@@ -110,6 +126,48 @@ a {
 
 #patch-listing:active {
   opacity: 60%;
+}
+.will-is-stupid {
+  display: flex;
+  justify-items: end;
+}
+.dropdown {
+  position: relative;
+}
+.dropbtn {
+  margin-top: 2.2rem;
+  color: whitesmoke;
+}
+.dropbtn:visited {
+  text-decoration: none;
+  color: whitesmoke;
+}
+
+.dropdown:hover .nav-buttons {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .nav-items {
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 4px;
+    min-width: 0px;
+  }
+
+  #logo {
+    bottom: 0;
+  }
+  .dropbtn {
+    bottom: 0;
+  }
+  .select {
+    bottom: 0;
+  }
+
+  .login {
+    bottom: 0;
+  }
 }
 /* properties container */
 #properties-container {

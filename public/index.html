@@ -83,11 +83,17 @@
               </select>
             </form>
 
-            <div class="nav-buttons">
-              <button id="add-listing">Add Listing</button>
-              <button id="delete-listing">Remove Listing</button>
-              <button id="patch-listing">Patch Listing</button>
+            <div class="dropdown">
+              <div class="will-is-stupid">
+                <a href="javascript:void(0)" class="dropbtn">Realtor Hub</a>
+              </div>
+              <div class="nav-buttons">
+                <button id="add-listing">Add Listing</button>
+                <button id="delete-listing">Remove Listing</button>
+                <button id="patch-listing">Patch Listing</button>
+              </div>
             </div>
+            <div class="login"><a href="javascript:void(0)">Login</a></div>
           </div>
         </nav>
       </header>
@@ -140,7 +146,7 @@
               Square Footage*
               <input id="sqft" type="number" placeholder="2000" required />
               Image URL(Optional)
-              <input id="img" type="url" placeholder="Image URL" />
+              <input id="img" type="text" placeholder="Image URL" />
               Realtor ID*
               <input id="realtor-id" type="number" required />
               <button type="submit" id="submit-listing">Submit</button>
@@ -257,7 +263,11 @@
               <li><a href="#">Our Services</a></li>
               <li><a href="#">Privacy Policy</a></li>
               <li><a href="#">Terms & Conditions</a></li>
-              <li><a href="#">Partners</a></li>
+              <li>
+                <a href="https://globo-gym.onrender.com/" target="_blank"
+                  >Partners</a
+                >
+              </li>
             </ul>
           </div>
 
