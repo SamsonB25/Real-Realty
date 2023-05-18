@@ -30,6 +30,7 @@ body {
 
 #logo {
   max-width: 60px;
+  order: 1;
 }
 
 main {
@@ -43,14 +44,27 @@ a {
   color: whitesmoke;
 }
 
-.login {
+#login-link {
   color: whitesmoke;
   margin-top: 2.2rem;
+  cursor: pointer;
+  order: 5;
 }
-.login :visited {
+
+#register-link {
   color: whitesmoke;
-  text-decoration: none;
+  margin-top: 2.2rem;
+  cursor: pointer;
+  order: 3;
 }
+
+#logout-link {
+  color: whitesmoke;
+  margin-top: 2.2rem;
+  cursor: pointer;
+  order: 4;
+}
+
 /* nav items */
 nav {
   display: flex;
@@ -61,8 +75,8 @@ nav {
 }
 .select {
   margin-top: 2.4rem;
-
   color: whitesmoke;
+  order: 2;
 }
 
 .nav-items {
@@ -90,11 +104,11 @@ nav {
   width: 6.2rem;
 }
 
-#add-listing:hover {
+#add-listing :hover {
   opacity: 80%;
 }
 
-#add-listing:active {
+#add-listing :active {
   opacity: 60%;
 }
 
@@ -105,11 +119,11 @@ nav {
   width: 6.2rem;
 }
 
-#delete-listing:hover {
+#delete-listing :hover {
   opacity: 80%;
 }
 
-#delete-listing:active {
+#delete-listing :active {
   opacity: 60%;
 }
 
@@ -127,16 +141,18 @@ nav {
 #patch-listing:active {
   opacity: 60%;
 }
-.will-is-stupid {
+.realtor-hub {
   display: flex;
   justify-items: end;
 }
 .dropdown {
   position: relative;
+  order: 3;
 }
 .dropbtn {
   margin-top: 2.2rem;
   color: whitesmoke;
+  order: 2;
 }
 .dropbtn:visited {
   text-decoration: none;
@@ -195,7 +211,7 @@ nav {
     bottom: 0;
   }
 
-  .login {
+  #login-link {
     bottom: 0;
   }
   .footer {
@@ -337,6 +353,48 @@ nav {
 
 .p-close:hover,
 .p-close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.user-login-form input {
+  display: flex;
+  width: 175px;
+  padding-bottom: 5px;
+  margin: 5px;
+}
+
+.user-close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.user-close:hover,
+.user-close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.user-register-form input {
+  display: flex;
+  width: 175px;
+  padding-bottom: 5px;
+  margin: 5px;
+}
+
+register-close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+#register-close:hover,
+#register-close:focus {
   color: black;
   text-decoration: none;
   cursor: pointer;

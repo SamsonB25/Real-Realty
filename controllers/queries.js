@@ -1,3 +1,11 @@
+// create all queries for users
+export const allUsers = `SELECT * FROM users`;
+export const user = `SELECT * FROM users WHERE username = $1 AND password = $2 `;
+export const createUsers = `INSERT INTO users(username, password, phone, email)
+VALUES($1, $2, $3, $4)`;
+export const usernameCheck = `SELECT username FROM users WHERE username = $1`;
+export const like_property = `UPDATE users SET liked_properties = $1 WHERE username = $2`;
+export const usersLogin = `SELECT password FROM users WHERE username = $1`;
 // create all queries for the realtor controller
 export const realtors = "SELECT * FROM realtors";
 export const realtorById = `SELECT * FROM realtors WHERE id = $1`;

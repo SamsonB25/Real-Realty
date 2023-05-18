@@ -84,7 +84,7 @@
             </form>
 
             <div class="dropdown">
-              <div class="will-is-stupid">
+              <div class="realtor-hub">
                 <a href="javascript:void(0)" class="dropbtn">Realtor Hub</a>
               </div>
               <div class="nav-buttons">
@@ -93,7 +93,9 @@
                 <button id="patch-listing">Patch Listing</button>
               </div>
             </div>
-            <div class="login"><a href="javascript:void(0)">Login</a></div>
+            <div id="login-link">Login</div>
+            <div id="register-link">Register</div>
+            <div id="logout-link">Log Out</div>
           </div>
         </nav>
       </header>
@@ -246,6 +248,82 @@
           </div>
         </div>
         <!-- end patch listing modal -->
+        <!-- start user log in modal -->
+        <div id="user-login" class="modal">
+          <div class="modal-content">
+            <span class="user-close">&times;</span>
+            <form action="#" class="user-login-form">
+              <h3>Login:</h3>
+              <label for="user-username">Username*</label>
+              <input
+                id="user-username"
+                class="user-username"
+                type="text"
+                placeholder="Username"
+                required
+              />
+
+              <label for="user-password">Password*</label>
+              <input
+                id="user-password"
+                class="user-password"
+                type="password"
+                placeholder="Password"
+                required
+              />
+
+              <button type="submit" id="user-login-btn">Login</button>
+            </form>
+          </div>
+          <!-- end user login modal -->
+        </div>
+
+        <!-- start user sign up -->
+        <div id="user-register" class="modal">
+          <div class="modal-content">
+            <span class="register-close">&times;</span>
+            <form action="#" class="user-register-form">
+              <h3>Register:</h3>
+              <label for="register-username">Username*</label>
+              <input
+                id="register-username"
+                class="register-username"
+                type="text"
+                placeholder="Username"
+                required
+              />
+
+              <label for="register-password">Password*</label>
+              <input
+                id="register-password"
+                class="register-password"
+                type="password"
+                placeholder="Password"
+                required
+              />
+
+              <label for="register-phone">Phone Number*</label>
+              <input
+                id="register-phone"
+                class="signup-phone"
+                type="text"
+                placeholder="12345678910"
+                required
+              />
+              <label for="register-email">e-mail*</label>
+              <input
+                id="register-email"
+                class="register-email"
+                type="text"
+                placeholder="example@email.com"
+                required
+              />
+
+              <button type="submit" id="user-register-btn">Register</button>
+            </form>
+          </div>
+          <!-- end user sign up modal -->
+        </div>
         <div id="properties-container"></div>
       </main>
       <footer>

@@ -8,7 +8,8 @@ CREATE TABLE users(
   username VARCHAR(15) NOT NULL,
   password VARCHAR(255) NOT NULL,
   phone VARCHAR(15) NOT NULL,
-  email VARCHAR(255) NOT NULL
+  email VARCHAR(255) NOT NULL,
+  liked_properties JSON
 );
 
 CREATE TABLE states(

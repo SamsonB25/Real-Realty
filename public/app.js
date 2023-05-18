@@ -301,7 +301,7 @@ listingPatchButton.onclick = async (e) => {
   updateForm.reset();
 };
 
-// modal to add listing to properties
+// display patch listing modal
 const pListingModal = document.getElementById("p-listing");
 const pListingBtn = document.getElementById("patch-listing");
 const pSpan = document.getElementsByClassName("p-close")[0];
@@ -322,3 +322,125 @@ window.onclick = (event) => {
     pListingModal.style.display = "none";
   }
 };
+
+// user login
+const loginForm = document.querySelector(".user-login-form");
+const loginBtn = document.querySelector("#user-login-btn");
+loginBtn.onclick = async (e) => {
+  e.preventDefault();
+  const username = document.querySelector("#user-username").value;
+  const password = document.querySelector("#user-password").value;
+  const formData = {
+    username: username,
+    password: password,
+  };
+  axios
+    .post(`user/login/${formData.username}/${formData.password}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    .then((res) => {
+      if (res.data.accessToken) {
+        const token = res.data.accessToken;
+        localStorage.setItem("token", token);
+        location.reload();
+      }
+    })
+    .catch(async (err) => {
+      alert("Invalid Username or Password");
+      console.error(err.message);
+      loginForm.reset();
+    });
+};
+
+// modal to log user in
+const userLoginModal = document.getElementById("user-login");
+const userLoginBtn = document.querySelector("#login-link");
+const userSpan = document.getElementsByClassName("user-close")[0];
+
+// When the user clicks on the button, open the modal
+userLoginBtn.addEventListener("click", () => {
+  userLoginModal.style.display = "block";
+});
+
+// When the user clicks on <span> (x), close the modal
+userSpan.onclick = () => {
+  userLoginModal.style.display = "none";
+};
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = (event) => {
+  if (event.target == userLoginModal) {
+    userLoginModal.style.display = "none";
+  }
+};
+
+// user sign up
+const registerBtn = document.querySelector("#user-register-btn");
+const registerForm = document.querySelector(".user-register-form");
+registerBtn.onclick = () => {
+  const username = document.querySelector("#register-username").value;
+  const password = document.querySelector("#register-password").value;
+  const phone = document.querySelector("#register-phone").value;
+  const email = document.querySelector("#register-email").value;
+
+  const formData = {
+    username: username,
+    password: password,
+    phone: phone,
+    email: email,
+  };
+
+  axios
+    .post("/user/signup", formData, console.log(formData), {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((error) => {
+      alert("Username Already Exists.");
+      console.log(error.response);
+      registerForm.reset();
+    });
+  location.reload();
+};
+
+const userRegisterModal = document.querySelector("#user-register");
+const userRegisterBtn = document.querySelector("#register-link");
+const registerSpan = document.getElementsByClassName("register-close")[0];
+
+// When the user clicks on the button, open the modal
+userRegisterBtn.addEventListener("click", () => {
+  userRegisterModal.style.display = "block";
+});
+
+// When the user clicks on <span> (x), close the modal
+registerSpan.onclick = () => {
+  userRegisterModal.style.display = "none";
+};
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = (event) => {
+  if (event.target == userRegisterModal) {
+    userRegisterModal.style.display = "none";
+  }
+};
+
+// logout button
+const logoutLink = document.querySelector("#logout-link");
+logoutLink.addEventListener("click", () => {
+  localStorage.removeItem("token");
+  location.reload();
+});
+
+// nav button display if token is present or not
+if (localStorage.getItem("token")) {
+  userLoginBtn.style.display = "none";
+  userRegisterBtn.style.display = "none";
+} else {
+  logoutLink.style.display = "none";
+}

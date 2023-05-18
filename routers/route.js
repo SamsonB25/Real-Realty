@@ -18,9 +18,25 @@ import {
   updateProperties,
 } from "../controllers/propController.js";
 import { getAllStates } from "../controllers/stateController.js";
+import {
+  createUser,
+  getAllUsers,
+  getUser,
+  tokenCheck,
+  userLogin,
+  usersLikedProperties,
+} from "../controllers/usersController.js";
 
 const router = Router();
-
+// user routes
+router
+  .get("/user", getAllUsers)
+  .get("/user/:username/:password", getUser)
+  .get("/user/liked_properties", usersLikedProperties);
+router
+  .post("/user/signup", createUser)
+  .post("/user/login/:username/:password", userLogin)
+  .post("/token", tokenCheck);
 // property routes
 router
   .get("/home", getAllPropertiesWithRealtors)
