@@ -344,24 +344,27 @@ loginBtn.onclick = async (e) => {
     username: username,
     password: password,
   };
-  axios
-    .post(`user/login/${formData.username}/${formData.password}`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    .then((res) => {
-      if (res.data.accessToken) {
-        const token = res.data.accessToken;
-        localStorage.setItem("token", token);
-        location.reload();
+  try {
+    const res = await axios.post(
+      `user/login/${formData.username}/${formData.password}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-    })
-    .catch(async (err) => {
-      alert("Invalid Username or Password");
-      console.error(err.message);
-      loginForm.reset();
-    });
+    );
+    console.log(res.data);
+    if (res.data.accessToken) {
+      console.log("token");
+      const token = res.data.accessToken;
+      localStorage.setItem("token", token);
+      location.reload();
+    }
+  } catch (err) {
+    alert("Invalid Username or Password");
+    console.error(err);
+    loginForm.reset();
+  }
 };
 
 // modal to log user in

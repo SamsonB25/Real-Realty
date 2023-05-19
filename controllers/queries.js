@@ -9,7 +9,7 @@ export const usersLogin = `SELECT password FROM users WHERE username = $1`;
 export const usersLikedProperties = `
 SELECT * FROM users
 JOIN properties
-ON (SELECT liked_properties ->> 'property_id'::int AS property_id) = properties.id`;
+ON (users.liked_properties ->> 'property_id')::int = properties.id`;
 // create all queries for the realtor controller
 export const realtors = "SELECT * FROM realtors";
 export const realtorById = `SELECT * FROM realtors WHERE id = $1`;
