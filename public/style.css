@@ -12,15 +12,17 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
-  position: absolute;
+  position: relative;
   width: 100%;
   overflow-x: hidden;
   margin: 0;
 }
 
 #page-container {
+  display: block;
   position: relative;
   min-height: 100vh;
+  overflow: hidden;
 }
 
 .slogan {
@@ -76,8 +78,14 @@ a {
   cursor: pointer;
 }
 
+.nav-links .list-item :hover {
+  color: whitesmoke;
+  transform: scale(1.02);
+}
+
 .bar {
   color: whitesmoke;
+  transform: none;
 }
 #logo {
   max-width: 80px;
@@ -176,10 +184,14 @@ a {
   margin-bottom: 3px;
 }
 
+.menu-line :hover {
+  color: whitesmoke;
+}
+
 /* properties container */
 #properties-container {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   flex-wrap: wrap;
   padding-bottom: 18rem;
 }
@@ -188,12 +200,18 @@ a {
   width: 400px;
   margin: 10px;
   background-color: rgb(110, 110, 110);
+  border: 1px solid black;
   border-radius: 10px;
+  justify-content: center;
 }
 
 .property-card:hover {
   cursor: pointer;
-  box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
+  box-shadow: 0 0 11px rgba(255, 255, 255, 0.718);
+  transform: scale(1.02);
+}
+.property-info {
+  bottom: 0;
 }
 
 .property-img img {
@@ -403,7 +421,7 @@ a {
   font-size: 2em;
   margin: 0% 1%;
 }
-@media all and (max-width: 860px) {
+@media (max-width: 845px) {
   .nav {
     padding: 0;
     padding-top: 5px;
@@ -423,6 +441,15 @@ a {
     border-top: 1px solid aqua;
     width: 100%;
     text-align: center;
+  }
+
+  .list-item .dropdown {
+    display: none;
+    border-top: black;
+  }
+
+  .list-item {
+    padding-bottom: 5px;
   }
 
   .nav-links {
@@ -458,6 +485,7 @@ a {
     margin: 10px;
     background-color: rgb(110, 110, 110);
     border-radius: 10px;
+    font-size: x-small;
   }
 
   .footer {
@@ -484,5 +512,14 @@ a {
   }
   .footer .row a i {
     margin: 0% 3%;
+  }
+}
+@media (max-width: 390px) {
+  .slogan {
+    font-size: larger;
+  }
+
+  .property-card {
+    width: 165px;
   }
 }

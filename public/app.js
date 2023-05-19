@@ -83,6 +83,9 @@ logo.addEventListener("click", async () => {
   propertiesContainer.innerHTML = "";
   displayProperties();
 });
+
+const savedProperties = document.querySelector("saved-properties-link");
+savedProperties.addEventListener("click");
 // selector drop down search shows properties by state
 const stateSelect = document.getElementById("by-state");
 stateSelect.addEventListener("change", async (e) => {
