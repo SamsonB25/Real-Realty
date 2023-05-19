@@ -1,5 +1,5 @@
 const propertiesContainer = document.getElementById("properties-container");
-
+// start of data fetching
 async function getproperties() {
   try {
     const response = await axios.get("/home");
@@ -38,6 +38,9 @@ async function getRealtor(id) {
     console.error(err);
   }
 }
+
+// end of data fetching
+// start of display features
 
 const displayProperties = async () => {
   try {
@@ -120,7 +123,9 @@ stateSelect.addEventListener("change", async (e) => {
   }
 });
 
+// start crud features
 // Add listing code below
+
 const listingForm = document.querySelector("#listing-form");
 const listingSubmitButton = document.getElementById("submit-listing");
 listingSubmitButton.onclick = async (e) => {
@@ -191,6 +196,7 @@ window.onclick = (event) => {
 };
 
 // Delete listing code below
+
 const delForm = document.querySelector(".delete-listing-form");
 const listingRemoveButton = document.querySelector("#remove-listing");
 listingRemoveButton.onclick = async (e) => {
@@ -241,6 +247,7 @@ window.onclick = (event) => {
 };
 
 // Update listing code below
+
 const updateForm = document.querySelector("#update-form");
 const listingPatchButton = document.querySelector("#update-listing");
 listingPatchButton.onclick = async (e) => {
@@ -322,6 +329,9 @@ window.onclick = (event) => {
     pListingModal.style.display = "none";
   }
 };
+
+// end of crud features
+// start user management
 
 // user login
 const loginForm = document.querySelector(".user-login-form");
@@ -430,17 +440,28 @@ window.onclick = (event) => {
   }
 };
 
-// logout button
+// user logout
 const logoutLink = document.querySelector("#logout-link");
 logoutLink.addEventListener("click", () => {
   localStorage.removeItem("token");
   location.reload();
 });
 
+// end of user management
+
+// nav bar dom manipulation and mobile events
 // nav button display if token is present or not
+const realtorHub = document.querySelector(".realtor-hub");
 if (localStorage.getItem("token")) {
   userLoginBtn.style.display = "none";
   userRegisterBtn.style.display = "none";
 } else {
   logoutLink.style.display = "none";
+  realtorHub.style.display = "none";
 }
+
+const mobileNavItems = document.querySelector("#nav-list");
+const mobileMenuBar = document.querySelector("#toggle-menu");
+mobileMenuBar.addEventListener("click", () => {
+  mobileNavItems.classList.toggle("active");
+});

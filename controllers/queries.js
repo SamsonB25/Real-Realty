@@ -6,6 +6,10 @@ VALUES($1, $2, $3, $4)`;
 export const usernameCheck = `SELECT username FROM users WHERE username = $1`;
 export const like_property = `UPDATE users SET liked_properties = $1 WHERE username = $2`;
 export const usersLogin = `SELECT password FROM users WHERE username = $1`;
+export const usersLikedProperties = `
+SELECT * FROM users
+JOIN properties
+ON (SELECT liked_properties ->> 'property_id'::int AS property_id) = properties.id`;
 // create all queries for the realtor controller
 export const realtors = "SELECT * FROM realtors";
 export const realtorById = `SELECT * FROM realtors WHERE id = $1`;
