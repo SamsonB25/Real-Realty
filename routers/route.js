@@ -24,7 +24,7 @@ import {
   getUser,
   tokenCheck,
   userLogin,
-  usersLikedProperties,
+  userLikedProperties,
 } from "../controllers/usersController.js";
 
 const router = Router();
@@ -32,10 +32,11 @@ const router = Router();
 router
   .get("/user", getAllUsers)
   .get("/user/:username/:password", getUser)
-  .get("/user/liked_properties", usersLikedProperties);
+  .get("/users/liked_properties/:username", userLikedProperties);
 router
   .post("/user/signup", createUser)
   .post("/user/login/:username/:password", userLogin)
+  .post("/user/:id/:username")
   .post("/token", tokenCheck);
 // property routes
 router

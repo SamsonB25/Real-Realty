@@ -4,12 +4,13 @@ export const user = `SELECT * FROM users WHERE username = $1 AND password = $2 `
 export const createUsers = `INSERT INTO users(username, password, phone, email)
 VALUES($1, $2, $3, $4)`;
 export const usernameCheck = `SELECT username FROM users WHERE username = $1`;
-export const like_property = `UPDATE users SET liked_properties = $1 WHERE username = $2`;
+export const like_property = `UPDATE users SET liked_properties = {'property_id':$1} WHERE username = $2`;
 export const usersLogin = `SELECT password FROM users WHERE username = $1`;
 export const usersLikedProperties = `
 SELECT * FROM users
 JOIN properties
-ON (users.liked_properties ->> 'property_id')::int = properties.id`;
+ON (users.liked_properties ->> 'property_id')::int = properties.id
+WHERE username = $1`;
 // create all queries for the realtor controller
 export const realtors = "SELECT * FROM realtors";
 export const realtorById = `SELECT * FROM realtors WHERE id = $1`;
@@ -41,10 +42,14 @@ SELECT * FROM properties
 JOIN realtors ON realtors.id = properties.realtors_id
 WHERE realtors_id = $1`;
 export const propertiesByStates = `
-SELECT * FROM properties
-JOIN states ON states.id = properties.states_id
-JOIN realtors ON states.id = realtors.states_id
-WHERE states.id = $1`;
+SELECT p.id AS property_id, p.street_address, p.city, p.zipcode, p.price,
+       p.bed, p.bath, p.sqft, p.images, p.date_posted,
+       r.id AS realtor_id, r.first_name, r.last_name, r.rating, r.properties_sold,
+       s.id AS state_id, s.state_name
+FROM properties p
+LEFT JOIN realtors r ON p.realtors_id = r.id
+LEFT JOIN states s ON p.states_id = s.id
+WHERE s.id = $1`;
 //post request
 export const newProperty = `
 INSERT INTO properties(

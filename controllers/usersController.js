@@ -4,6 +4,7 @@ import {
   createUsers,
   user,
   usernameCheck,
+  usersLikedProperties,
   usersLogin,
 } from "./queries.js";
 import bcrypt from "bcrypt";
@@ -66,13 +67,14 @@ export const userLogin = async (req, res) => {
     const password = req.params.password;
 
     const user = await db.query(usersLogin, [username]);
-    console.log(user.rows[0]);
     if (user.rowCount === 0) {
       return res.status(404).json("Username not found");
     }
     if (await bcrypt.compare(password, user.rows[0].password)) {
       const accessToken = jwt.sign(username, process.env.ACCESS_TOKEN_SECRET);
-      return res.status(201).json({ accessToken: accessToken });
+      return res
+        .status(201)
+        .json({ accessToken: accessToken, username: username });
     } else {
       return res.status(404).json("Incorrect Username or Password.");
     }
@@ -92,8 +94,13 @@ export const tokenCheck = async (req, res) => {
   });
 };
 
-export const usersLikedProperties = async (req, res, next) => {
+export const userLikedProperties = async (req, res) => {
   try {
-    console.log("here");
-  } catch (err) {}
+    const username = req.params.username;
+    const results = await db.query(usersLikedProperties, [username]);
+    res.status(200).json(results.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json("Something Went Wrong");
+  }
 };

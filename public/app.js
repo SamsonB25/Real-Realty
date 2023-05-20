@@ -42,7 +42,7 @@ async function getRealtor(id) {
 // end of data fetching
 // start of display features
 
-const displayProperties = async () => {
+const displayProperties = async (cardTimer) => {
   try {
     const propertyData = await getproperties();
     propertyData.forEach((obj) => {
@@ -55,12 +55,13 @@ const displayProperties = async () => {
       }
       const html = `
     <div class="property-card">
+      <div class="save fa-heart"></div>
       <div class="property-img">
         <img src="${obj.images}">
       </div>
       <div class="property-info">
-        <p><span class="price">${obj.price}</span>
-        </br>${obj.bed} Bed  ${obj.bath} Bath   ${obj.sqft} Sqft
+        <div class="price id">${obj.price}<div class="prop-id">${obj.id}</div></div>
+        <p>${obj.bed} Bed  ${obj.bath} Bath   ${obj.sqft} Sqft
         </br>${obj.street_address}, ${obj.city}, ${obj.states_id} ${obj.zipcode}
         </br>${obj.date_posted}</p>
           <div class="property-card-footer">
@@ -75,8 +76,24 @@ const displayProperties = async () => {
     });
   } catch (error) {}
 };
+
+// allows for the property card to be loaded in and then selected
+const propertyCardTimer = async () => {
+  setTimeout(async () => {
+    const propertyCards = document.querySelectorAll(".property-card");
+    propertyCards.forEach((propertyCard) => {
+      const propID = propertyCard.querySelector(".prop-id");
+      propertyCard.addEventListener("click", () => {
+        propertyCard.classList.toggle("selected-card");
+        console.log(propID.textContent);
+      });
+    });
+  }, 1000);
+};
+
 // home screen loads all properties
-displayProperties();
+displayProperties(propertyCardTimer());
+
 // clicking logo also shows all properties
 const logo = document.querySelector("#logo");
 logo.addEventListener("click", async () => {
@@ -84,8 +101,49 @@ logo.addEventListener("click", async () => {
   displayProperties();
 });
 
-const savedProperties = document.querySelector("saved-properties-link");
-savedProperties.addEventListener("click");
+// displays properties users has saved
+const savedProperties = document.querySelector("#saved-properties-link"); // almost complete
+savedProperties.addEventListener("click", async () => {
+  propertiesContainer.innerHTML = "";
+  try {
+    const res = await axios(
+      `/users/liked_properties/${localStorage.getItem("username")}`
+    );
+    const savedProperties = res.data;
+    savedProperties.forEach((obj) => {
+      console.log(obj);
+      obj.date_posted = luxon.DateTime.fromISO(obj.date_posted).toFormat(
+        "dd LLL yyyy"
+      );
+
+      if (obj.images === null) {
+        obj.images = "/images/no-image.jpg";
+      }
+      const html = `
+    <div class="property-card">
+      <div class="property-img">
+      <div class="save fa-heart"></div>
+        <img src="${obj.images}">
+      </div>
+      <div class="property-info">
+        <div class="price id">${obj.price}<div class="prop-id">${obj.property_id}</div></div>
+        <p>${obj.bed} Bed  ${obj.bath} Bath   ${obj.sqft} Sqft
+        </br>${obj.street_address}, ${obj.city}, ${obj.states_id} ${obj.zipcode}
+        </br>${obj.date_posted}</p>
+          <div class="property-card-footer">
+            Realtor:
+            <a class="realtor-link" href="">
+               ${obj.first_name} ${obj.last_name}
+            </a>
+          </div>  
+      </div>
+    </div>`;
+      propertiesContainer.insertAdjacentHTML("afterbegin", html);
+    });
+  } catch (error) {
+    console.error(error);
+  }
+});
 // selector drop down search shows properties by state
 const stateSelect = document.getElementById("by-state");
 stateSelect.addEventListener("change", async (e) => {
@@ -94,6 +152,7 @@ stateSelect.addEventListener("change", async (e) => {
     const selectedState = e.target.value;
     const displayState = await getPropertiesByState(selectedState);
     displayState.forEach((obj) => {
+      console.log(obj);
       obj.date_posted = luxon.DateTime.fromISO(obj.date_posted).toFormat(
         "dd LLL yyyy"
       );
@@ -107,9 +166,9 @@ stateSelect.addEventListener("change", async (e) => {
         <img src="${obj.images}">
       </div>
       <div class="property-info">
-        <p><span class="price">${obj.price}</span>
-        </br>${obj.bed} Bed  ${obj.bath} Bath   ${obj.sqft} Sqft
-        </br>${obj.street_address}, ${obj.city}, ${obj.states_id} ${obj.zipcode}
+        <div class="price id">${obj.price}<div class="prop-id">${obj.property_id}</div></div>
+        <p>${obj.bed} Bed  ${obj.bath} Bath   ${obj.sqft} Sqft
+        </br>${obj.street_address}, ${obj.city}, ${obj.state_id} ${obj.zipcode}
         </br>${obj.date_posted}</p>
           <div class="property-card-footer">
             Realtor:
@@ -121,6 +180,7 @@ stateSelect.addEventListener("change", async (e) => {
     </div>`;
       propertiesContainer.insertAdjacentHTML("afterbegin", html);
     });
+    await propertyCardTimer();
   } catch (err) {
     console.error(err);
   }
@@ -337,7 +397,7 @@ window.onclick = (event) => {
 // start user management
 
 // user login
-const loginForm = document.querySelector(".user-login-form");
+const loginForm = document.querySelector("#user-login-form");
 const loginBtn = document.querySelector("#user-login-btn");
 loginBtn.onclick = async (e) => {
   e.preventDefault();
@@ -356,11 +416,13 @@ loginBtn.onclick = async (e) => {
         },
       }
     );
-    console.log(res.data);
-    if (res.data.accessToken) {
+    const token = res.data.accessToken;
+    const username = res.data.username;
+    if (token) {
       console.log("token");
-      const token = res.data.accessToken;
+
       localStorage.setItem("token", token);
+      localStorage.setItem("username", username);
       location.reload();
     }
   } catch (err) {
@@ -464,6 +526,7 @@ if (localStorage.getItem("token")) {
 } else {
   logoutLink.style.display = "none";
   realtorHub.style.display = "none";
+  savedProperties.style.display = "none";
 }
 
 const mobileNavItems = document.querySelector("#nav-list");
