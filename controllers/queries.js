@@ -3,13 +3,19 @@ export const allUsers = `SELECT * FROM users`;
 export const user = `SELECT * FROM users WHERE username = $1 AND password = $2 `;
 export const createUsers = `INSERT INTO users(username, password, phone, email)
 VALUES($1, $2, $3, $4)`;
-export const usernameCheck = `SELECT username FROM users WHERE username = $1`;
-export const like_property = `UPDATE users SET liked_properties = {'property_id':$1} WHERE username = $2`;
+export const usernameCheck = `
+SELECT username FROM users WHERE username = $1`;
+export const likeProperty = `
+UPDATE users 
+SET liked_properties = ARRAY_APPEND(liked_properties, $1) 
+WHERE username = $2 RETURNING *`;
+export const unlikedProperty = `UPDATE users 
+SET liked_properties = ARRAY_REMOVE(liked_properties, $1) 
+WHERE username = $2 RETURNING *`;
 export const usersLogin = `SELECT password FROM users WHERE username = $1`;
 export const usersLikedProperties = `
-SELECT * FROM users
-JOIN properties
-ON (users.liked_properties ->> 'property_id')::int = properties.id
+SELECT  * FROM users
+JOIN properties ON properties.id = ANY (liked_properties)
 WHERE username = $1`;
 // create all queries for the realtor controller
 export const realtors = "SELECT * FROM realtors";
@@ -17,8 +23,7 @@ export const realtorById = `SELECT * FROM realtors WHERE id = $1`;
 export const realtorsByState = `
   SELECT realtors.first_name, realtors.last_name, realtors.phone, states.state_name_short
   FROM realtors JOIN states ON states.id = realtors.states_id
-  WHERE state_name_short = $1
-  `;
+  WHERE state_name_short = $1`;
 export const newRealtor = `INSERT INTO realtors( 
   users_id, states_id, first_name, last_name, rating, properties_sold, phone, email)
   VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`;
@@ -27,7 +32,7 @@ export const updateRealtor = `UPDATE realtors
   first_name = COALESCE( $3, first_name ), last_name = COALESCE( $4, last_name ),
   rating = COALESCE( $5, rating ), properties_sold = COALESCE( $6, properties_sold ), phone = COALESCE($7, phone),
   email = COALESCE( $8, email ) WHERE id =$9 RETURNING *
-  `;
+`;
 export const deleteRealtor = `DELETE FROM realtors WHERE id = $1 RETURNING *`;
 
 // create all queries for the properties

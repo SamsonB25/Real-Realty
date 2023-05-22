@@ -25,6 +25,8 @@ import {
   tokenCheck,
   userLogin,
   userLikedProperties,
+  sendLikedProperty,
+  sendUnlikedProperty,
 } from "../controllers/usersController.js";
 
 const router = Router();
@@ -38,6 +40,9 @@ router
   .post("/user/login/:username/:password", userLogin)
   .post("/user/:id/:username")
   .post("/token", tokenCheck);
+router
+  .patch("/users/liked/:username/:propertyID", sendLikedProperty)
+  .patch("/users/remove/:username/:propertyID", sendUnlikedProperty);
 // property routes
 router
   .get("/home", getAllPropertiesWithRealtors)

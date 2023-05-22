@@ -73,7 +73,7 @@ a {
 }
 
 .nav-links .list-item {
-  display: inline-block;
+  display: inline-flex;
   color: aqua;
   cursor: pointer;
 }
@@ -98,16 +98,22 @@ a {
   border-radius: 50%;
 }
 
-#register-link {
-  order: 3;
+#home-link {
+  position: absolute;
+  top: 31.3px;
+  left: 95px;
 }
 
-#logout-link {
+#register-link {
   order: 4;
 }
 
-#login-link {
+#logout-link {
   order: 5;
+}
+
+#login-link {
+  order: 6;
 }
 
 .nav-buttons {
@@ -232,13 +238,13 @@ a {
 .save {
   display: inline-block;
   font: normal normal normal 16px/1 FontAwesome;
-  font-size: 20px;
+  font-size: 23hgpx;
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   position: absolute;
-  z-index: 100;
-  margin: 5px;
+  z-index: 5;
+  margin: 8px;
   color: whitesmoke;
   -webkit-text-stroke: 1px#000;
 }
@@ -246,6 +252,11 @@ a {
 .save:hover {
   transform: scale(1.2);
   color: rgba(255, 0, 0, 0.21);
+}
+
+.save:active {
+  color: red;
+  opacity: 90%;
 }
 
 .saved {
@@ -286,11 +297,6 @@ a {
 
 .property-card-footer a:hover {
   box-shadow: 0 3px 5px rgba(33, 33, 33, 0.2);
-}
-
-.selected-property {
-  z-index: 10;
-  color: aqua;
 }
 
 /* The Modal (background) */
@@ -501,6 +507,9 @@ a {
 
   .list-item {
     padding-bottom: 5px;
+  }
+  #home-link {
+    position: revert;
   }
 
   .nav-links {

@@ -1,4 +1,5 @@
 const propertiesContainer = document.getElementById("properties-container");
+
 // start of data fetching
 async function getproperties() {
   try {
@@ -42,7 +43,7 @@ async function getRealtor(id) {
 // end of data fetching
 // start of display features
 
-const displayProperties = async (cardTimer) => {
+const displayProperties = async () => {
   try {
     const propertyData = await getproperties();
     propertyData.forEach((obj) => {
@@ -53,9 +54,15 @@ const displayProperties = async (cardTimer) => {
       if (obj.images === null) {
         obj.images = "/images/no-image.jpg";
       }
+
+      if (obj.price.length >= 8) {
+        obj.price = obj.price.slice(0, 8);
+      } else if (obj.price.length >= 10) {
+        obj.price = obj.price.slice(0, 10);
+      }
       const html = `
     <div class="property-card">
-      <div class="save fa-heart"></div>
+    <div id = "heart" class="save fa-heart"></div>
       <div class="property-img">
         <img src="${obj.images}">
       </div>
@@ -74,28 +81,50 @@ const displayProperties = async (cardTimer) => {
     </div>`;
       propertiesContainer.insertAdjacentHTML("afterbegin", html);
     });
+    propertyCardTimer(); // loads cards
+    selectCard();
+    saveBtnEvent();
   } catch (error) {}
 };
 
-// allows for the property card to be loaded in and then selected
+// allows for the property card to be loaded in from dom
 const propertyCardTimer = async () => {
   setTimeout(async () => {
     const propertyCards = document.querySelectorAll(".property-card");
     propertyCards.forEach((propertyCard) => {
-      const propID = propertyCard.querySelector(".prop-id");
       propertyCard.addEventListener("click", () => {
-        propertyCard.classList.toggle("selected-card");
-        console.log(propID.textContent);
+        propertyCard.classList.toggle("selected-property");
+        console.log("card selected");
       });
     });
   }, 1000);
 };
 
+const selectCard = async () => {
+  const propertyCards = document.querySelectorAll(".property-card");
+  propertyCards.forEach((propertyCard) => {
+    propertyCard.addEventListener("click", () => {
+      propertyCard.classList.toggle("selected-property");
+    });
+  });
+};
+
 // home screen loads all properties
-displayProperties(propertyCardTimer());
+displayProperties();
+setTimeout(() => {
+  // still needs work
+  const storedClassName = localStorage.getItem("saved-card");
+  console.log("loaded");
+  if (storedClassName) {
+    const element = document.querySelectorAll("#heart");
+    element.forEach((card) => {
+      card.classList.add(storedClassName);
+    });
+  }
+}, 1500);
 
 // clicking logo also shows all properties
-const logo = document.querySelector("#logo");
+const logo = document.querySelector("#home-link");
 logo.addEventListener("click", async () => {
   propertiesContainer.innerHTML = "";
   displayProperties();
@@ -111,7 +140,6 @@ savedProperties.addEventListener("click", async () => {
     );
     const savedProperties = res.data;
     savedProperties.forEach((obj) => {
-      console.log(obj);
       obj.date_posted = luxon.DateTime.fromISO(obj.date_posted).toFormat(
         "dd LLL yyyy"
       );
@@ -122,11 +150,11 @@ savedProperties.addEventListener("click", async () => {
       const html = `
     <div class="property-card">
       <div class="property-img">
-      <div class="save fa-heart"></div>
+      <div id = "heart" class="save fa-heart"></div>
         <img src="${obj.images}">
       </div>
       <div class="property-info">
-        <div class="price id">${obj.price}<div class="prop-id">${obj.property_id}</div></div>
+        <div class="price id">${obj.price}<div class="prop-id">${obj.id}</div></div>
         <p>${obj.bed} Bed  ${obj.bath} Bath   ${obj.sqft} Sqft
         </br>${obj.street_address}, ${obj.city}, ${obj.states_id} ${obj.zipcode}
         </br>${obj.date_posted}</p>
@@ -139,11 +167,43 @@ savedProperties.addEventListener("click", async () => {
       </div>
     </div>`;
       propertiesContainer.insertAdjacentHTML("afterbegin", html);
+      saveBtnEvent();
     });
   } catch (error) {
     console.error(error);
   }
 });
+
+const saveBtnEvent = async () => {
+  const propertyCards = document.querySelectorAll(".property-card");
+  propertyCards.forEach((propertyCard) => {
+    const savePropertyBtn = propertyCard.querySelector("#heart");
+    savePropertyBtn.addEventListener("click", async (e) => {
+      e.stopPropagation();
+      const username = localStorage.getItem("username");
+      const propID = Number(propertyCard.querySelector(".prop-id").textContent);
+      const saved = savePropertyBtn.classList.toggle("saved");
+      if (saved) {
+        const savedCard = document.getElementById("heart");
+        savedCard.classList.add("saved");
+        console.log(savedCard.className.slice(14));
+        localStorage.setItem("saved-card", savedCard.className.slice(14));
+        const sendSavedProp = await axios.patch(
+          `/users/liked/${username}/${propID}`
+        );
+        console.log();
+      } else {
+        console.log(propID);
+        localStorage.removeItem("saved-property");
+        const sendSavedProp = await axios.patch(
+          `/users/remove/${username}/${propID}`
+        );
+        console.log(sendSavedProp.data);
+      }
+    });
+  });
+};
+
 // selector drop down search shows properties by state
 const stateSelect = document.getElementById("by-state");
 stateSelect.addEventListener("change", async (e) => {
@@ -163,6 +223,7 @@ stateSelect.addEventListener("change", async (e) => {
       const html = `
     <div class="property-card">
       <div class="property-img">
+      <div id = "heart" class="save fa-heart"></div>
         <img src="${obj.images}">
       </div>
       <div class="property-info">

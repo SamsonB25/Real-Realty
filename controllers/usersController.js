@@ -2,6 +2,8 @@ import { db } from "../database/db.js";
 import {
   allUsers,
   createUsers,
+  likeProperty,
+  unlikedProperty,
   user,
   usernameCheck,
   usersLikedProperties,
@@ -101,6 +103,32 @@ export const userLikedProperties = async (req, res) => {
     res.status(200).json(results.rows);
   } catch (err) {
     console.error(err);
+    res.status(500).json("Something Went Wrong");
+  }
+};
+
+export const sendLikedProperty = async (req, res) => {
+  try {
+    const username = req.params.username;
+    const propertyID = Number(req.params.propertyID);
+    const results = await db.query(likeProperty, [propertyID, username]);
+    console.log(results);
+    console.log(req.body);
+    res.status(202).json(results.rows[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json("Something Went Wrong");
+  }
+};
+
+export const sendUnlikedProperty = async (req, res) => {
+  try {
+    const username = req.params.username;
+    const propertyID = Number(req.params.propertyID);
+    const results = await db.query(unlikedProperty, [propertyID, username]);
+    res.status(202).json(results.rows[0]);
+  } catch (error) {
+    console.error(error);
     res.status(500).json("Something Went Wrong");
   }
 };
