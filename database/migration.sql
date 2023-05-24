@@ -9,7 +9,7 @@ CREATE TABLE users(
   password VARCHAR(255) NOT NULL,
   phone VARCHAR(15) NOT NULL,
   email VARCHAR(255) NOT NULL,
-  liked_properties integer[]
+  liked_properties integer[0]
 );
 
 CREATE TABLE states(

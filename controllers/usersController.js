@@ -100,6 +100,7 @@ export const userLikedProperties = async (req, res) => {
   try {
     const username = req.params.username;
     const results = await db.query(usersLikedProperties, [username]);
+
     res.status(200).json(results.rows);
   } catch (err) {
     console.error(err);

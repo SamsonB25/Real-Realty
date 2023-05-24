@@ -34,19 +34,6 @@
                   <div id="home-link">Home</div>
                 </li>
                 <li class="list-item">
-                  <div class="dropdown">
-                    <div class="realtor-hub">
-                      Realtor Hub <span class="bar">|</span>
-                    </div>
-                    <div class="nav-buttons">
-                      <button id="add-listing">Add Listing</button>
-                      <button id="delete-listing">Remove Listing</button>
-                      <button id="patch-listing">Patch Listing</button>
-                    </div>
-                  </div>
-                </li>
-
-                <li class="list-item">
                   <div id="saved-properties-link">
                     Saved Properties <span class="bar">|</span>
                   </div>
@@ -284,7 +271,7 @@
         <div id="user-login" class="modal">
           <div class="modal-content">
             <span class="user-close">&times;</span>
-            <form action="#" id="user-login-form">
+            <form action="submit" id="user-login-form">
               <h3>Login:</h3>
               <label for="user-username">Username*</label>
               <input
@@ -359,7 +346,9 @@
 
         <!-- start main content -->
         <!-- modal for selected property -->
-        <div class="selected-property"></div>
+        <div id="selected-property" class="modal">
+          <div class="bg modal"></div>
+        </div>
         <div id="properties-container"></div>
       </main>
       <footer>
@@ -374,7 +363,16 @@
           <div class="row">
             <ul class="footer-links">
               <li><a href="#">Contact us</a></li>
-              <li><a href="#">Our Services</a></li>
+              <li>
+                <div class="dropdown">
+                  <div class="realtor-hub">Realtor Hub</div>
+                  <div class="nav-buttons">
+                    <button id="add-listing">Add Listing</button>
+                    <button id="delete-listing">Remove Listing</button>
+                    <button id="patch-listing">Patch Listing</button>
+                  </div>
+                </div>
+              </li>
               <li><a href="#">Privacy Policy</a></li>
               <li><a href="#">Terms & Conditions</a></li>
               <li>

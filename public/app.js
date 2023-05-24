@@ -89,43 +89,59 @@ const displayProperties = async () => {
 
 // allows for the property card to be loaded in from dom
 const propertyCardTimer = async () => {
-  setTimeout(async () => {
-    const propertyCards = document.querySelectorAll(".property-card");
-    propertyCards.forEach((propertyCard) => {
-      propertyCard.addEventListener("click", () => {
-        propertyCard.classList.toggle("selected-property");
-        console.log("card selected");
-      });
-    });
+  setTimeout(() => {
+    return document.querySelectorAll(".property-card");
   }, 1000);
 };
 
 const selectCard = async () => {
   const propertyCards = document.querySelectorAll(".property-card");
-  propertyCards.forEach((propertyCard) => {
-    propertyCard.addEventListener("click", () => {
-      propertyCard.classList.toggle("selected-property");
+  const selectedProperty = document.querySelector("#selected-property");
+  propertyCards.forEach((obj) => {
+    obj.addEventListener("click", () => {
+      let card = obj.cloneNode(true);
+      selectedProperty.style.display = "block";
+      selectedProperty.appendChild(card);
     });
   });
+  window.onclick = (event) => {
+    if (event.target == selectedProperty) {
+      selectedProperty.style.display = "none";
+    }
+  };
 };
 
 // home screen loads all properties
 displayProperties();
-setTimeout(() => {
-  // still needs work
-  const storedClassName = localStorage.getItem("saved-card");
-  console.log("loaded");
-  if (storedClassName) {
-    const element = document.querySelectorAll("#heart");
-    element.forEach((card) => {
-      card.classList.add(storedClassName);
-    });
+setTimeout(async () => {
+  try {
+    const storedClassName = localStorage.getItem("saved-card");
+    const username = localStorage.getItem("username");
+    const res = await axios.get(`/users/liked_properties/${username}`);
+    const cardData = res.data[0];
+    if (storedClassName && username && cardData) {
+      const targetCards = document.querySelectorAll(".price");
+      const allCards = document.querySelectorAll("#heart");
+      targetCards.forEach((card) => {
+        // allCards.forEach((heart) => {
+        console.log(card);
+        const cardId = Number(card.querySelector(".prop-id").textContent);
+        console.log(cardData.liked_properties, cardId);
+        if (cardData.liked_properties.includes(cardId)) {
+          console.log("here");
+          card.classList.add(storedClassName);
+        }
+      });
+      // });
+    }
+  } catch (error) {
+    console.error(error);
   }
 }, 1500);
 
 // clicking logo also shows all properties
-const logo = document.querySelector("#home-link");
-logo.addEventListener("click", async () => {
+const home = document.querySelector("#home-link");
+home.addEventListener("click", async () => {
   propertiesContainer.innerHTML = "";
   displayProperties();
 });
@@ -135,7 +151,7 @@ const savedProperties = document.querySelector("#saved-properties-link"); // alm
 savedProperties.addEventListener("click", async () => {
   propertiesContainer.innerHTML = "";
   try {
-    const res = await axios(
+    const res = await axios.get(
       `/users/liked_properties/${localStorage.getItem("username")}`
     );
     const savedProperties = res.data;
@@ -168,6 +184,7 @@ savedProperties.addEventListener("click", async () => {
     </div>`;
       propertiesContainer.insertAdjacentHTML("afterbegin", html);
       saveBtnEvent();
+      selectCard();
     });
   } catch (error) {
     console.error(error);
@@ -188,17 +205,10 @@ const saveBtnEvent = async () => {
         savedCard.classList.add("saved");
         console.log(savedCard.className.slice(14));
         localStorage.setItem("saved-card", savedCard.className.slice(14));
-        const sendSavedProp = await axios.patch(
-          `/users/liked/${username}/${propID}`
-        );
-        console.log();
+        await axios.patch(`/users/liked/${username}/${propID}`);
       } else {
         console.log(propID);
-        localStorage.removeItem("saved-property");
-        const sendSavedProp = await axios.patch(
-          `/users/remove/${username}/${propID}`
-        );
-        console.log(sendSavedProp.data);
+        await axios.patch(`/users/remove/${username}/${propID}`);
       }
     });
   });
@@ -246,6 +256,8 @@ stateSelect.addEventListener("change", async (e) => {
     console.error(err);
   }
 });
+
+// displays selected properties in a modal
 
 // start crud features
 // Add listing code below
@@ -480,8 +492,6 @@ loginBtn.onclick = async (e) => {
     const token = res.data.accessToken;
     const username = res.data.username;
     if (token) {
-      console.log("token");
-
       localStorage.setItem("token", token);
       localStorage.setItem("username", username);
       location.reload();
@@ -573,6 +583,7 @@ window.onclick = (event) => {
 const logoutLink = document.querySelector("#logout-link");
 logoutLink.addEventListener("click", () => {
   localStorage.removeItem("token");
+  localStorage.removeItem("username");
   location.reload();
 });
 
