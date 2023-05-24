@@ -91,9 +91,6 @@ a {
   max-width: 80px;
   order: 1;
   top: 1px;
-}
-
-#logo:hover {
   box-shadow: 0 3px 5px rgba(65, 192, 255, 0.54);
   border-radius: 50%;
 }
@@ -333,7 +330,7 @@ a {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 60;
-  width: 25%;
+  width: 32rem;
   font-size: 40px;
 }
 
@@ -575,6 +572,15 @@ a {
     font-size: x-small;
   }
 
+  #selected-property .property-card {
+    width: 20rem;
+    font-size: 20px;
+  }
+
+  #selected-property .property-card .price {
+    font-size: 22px;
+  }
+
   .footer {
     text-align: left;
     padding: 5%;
@@ -608,5 +614,13 @@ a {
 
   .property-card {
     width: 165px;
+  }
+  #selected-property .property-card {
+    width: 18rem;
+    font-size: 18px;
+  }
+
+  #selected-property .property-card .price {
+    font-size: 20px;
   }
 }
