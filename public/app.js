@@ -61,31 +61,40 @@ const displayProperties = async () => {
         obj.price = obj.price.slice(0, 10);
       }
       const html = `
-    <div class="property-card">
-    <div id = "heart" class="save fa-heart"></div>
-      <div class="property-img">
-        <img src="${obj.images}">
-      </div>
-      <div class="property-info">
-        <div class="price id">${obj.price}<div class="prop-id">${obj.id}</div></div>
-        <p>${obj.bed} Bed  ${obj.bath} Bath   ${obj.sqft} Sqft
-        </br>${obj.street_address}, ${obj.city}, ${obj.states_id} ${obj.zipcode}
-        </br>${obj.date_posted}</p>
-          <div class="property-card-footer">
-            Realtor:
-            <a class="realtor-link" href="">
-               ${obj.first_name} ${obj.last_name}
-            </a>
-          </div>  
-      </div>
-    </div>`;
+        <div class="property-card">
+          <div id ="heart" class="prop-id save fa-heart">
+            <div class="prop-id">${obj.id}</div>
+          </div>
+          <div class="property-img ">
+            <img src="${obj.images}">
+          </div>
+          <div class="property-info ">
+            <div class="price id">${obj.price}</div>
+              <p>${obj.bed} Bed  ${obj.bath} Bath   ${obj.sqft} Sqft
+              </br>${obj.street_address}, ${obj.city}, ${obj.states_id} ${obj.zipcode}
+              </br>${obj.date_posted}</p>
+              <div class="property-card-footer">
+                Realtor:
+                <a class="realtor-link" href="">
+                ${obj.first_name} ${obj.last_name}
+                </a>
+              </dt iv>  
+            </div>
+        </div>`;
       propertiesContainer.insertAdjacentHTML("afterbegin", html);
     });
     propertyCardTimer(); // loads cards
+    checkForSavedProps();
     selectCard();
     saveBtnEvent();
   } catch (error) {}
 };
+
+const home = document.querySelector("#home-link");
+home.addEventListener("click", async () => {
+  propertiesContainer.innerHTML = "";
+  displayProperties();
+});
 
 // allows for the property card to be loaded in from dom
 const propertyCardTimer = async () => {
@@ -102,49 +111,18 @@ const selectCard = async () => {
       let card = obj.cloneNode(true);
       selectedProperty.style.display = "block";
       selectedProperty.appendChild(card);
+      window.onclick = (event) => {
+        if (event.target == selectedProperty) {
+          selectedProperty.style.display = "none";
+          selectedProperty.innerHTML = "";
+        }
+      };
     });
   });
-  window.onclick = (event) => {
-    if (event.target == selectedProperty) {
-      selectedProperty.style.display = "none";
-    }
-  };
 };
 
 // home screen loads all properties
-displayProperties();
-setTimeout(async () => {
-  try {
-    const storedClassName = localStorage.getItem("saved-card");
-    const username = localStorage.getItem("username");
-    const res = await axios.get(`/users/liked_properties/${username}`);
-    const cardData = res.data[0];
-    if (storedClassName && username && cardData) {
-      const targetCards = document.querySelectorAll(".price");
-      const allCards = document.querySelectorAll("#heart");
-      targetCards.forEach((card) => {
-        // allCards.forEach((heart) => {
-        console.log(card);
-        const cardId = Number(card.querySelector(".prop-id").textContent);
-        console.log(cardData.liked_properties, cardId);
-        if (cardData.liked_properties.includes(cardId)) {
-          console.log("here");
-          card.classList.add(storedClassName);
-        }
-      });
-      // });
-    }
-  } catch (error) {
-    console.error(error);
-  }
-}, 1500);
-
 // clicking logo also shows all properties
-const home = document.querySelector("#home-link");
-home.addEventListener("click", async () => {
-  propertiesContainer.innerHTML = "";
-  displayProperties();
-});
 
 // displays properties users has saved
 const savedProperties = document.querySelector("#saved-properties-link"); // almost complete
@@ -164,27 +142,30 @@ savedProperties.addEventListener("click", async () => {
         obj.images = "/images/no-image.jpg";
       }
       const html = `
-    <div class="property-card">
-      <div class="property-img">
-      <div id = "heart" class="save fa-heart"></div>
-        <img src="${obj.images}">
-      </div>
-      <div class="property-info">
-        <div class="price id">${obj.price}<div class="prop-id">${obj.id}</div></div>
-        <p>${obj.bed} Bed  ${obj.bath} Bath   ${obj.sqft} Sqft
-        </br>${obj.street_address}, ${obj.city}, ${obj.states_id} ${obj.zipcode}
-        </br>${obj.date_posted}</p>
-          <div class="property-card-footer">
-            Realtor:
-            <a class="realtor-link" href="">
-               ${obj.first_name} ${obj.last_name}
-            </a>
-          </div>  
-      </div>
-    </div>`;
+          <div class="property-card">
+            <div class="property-img">
+              <div id = "heart" class="prop-id save fa-heart">
+                <div class="prop-id">${obj.id}</div>
+              </div>
+              <img src="${obj.images}">
+            </div>
+            <div class="property-info">
+              <div class="price id">${obj.price}</div>
+              <p>${obj.bed} Bed  ${obj.bath} Bath   ${obj.sqft} Sqft
+              </br>${obj.street_address}, ${obj.city}, ${obj.states_id} ${obj.zipcode}
+              </br>${obj.date_posted}</p>
+                <div class="property-card-footer">
+                  Realtor:
+                  <a class="realtor-link" href="">
+                    ${obj.first_name} ${obj.last_name}
+                  </a>
+                </div>  
+            </div>
+          </div>`;
       propertiesContainer.insertAdjacentHTML("afterbegin", html);
       saveBtnEvent();
       selectCard();
+      checkForSavedProps();
     });
   } catch (error) {
     console.error(error);
@@ -198,13 +179,15 @@ const saveBtnEvent = async () => {
     savePropertyBtn.addEventListener("click", async (e) => {
       e.stopPropagation();
       const username = localStorage.getItem("username");
+      if (!username) {
+        return alert("You must sign in to save properties!");
+      }
       const propID = Number(propertyCard.querySelector(".prop-id").textContent);
       const saved = savePropertyBtn.classList.toggle("saved");
       if (saved) {
         const savedCard = document.getElementById("heart");
         savedCard.classList.add("saved");
-        console.log(savedCard.className.slice(14));
-        localStorage.setItem("saved-card", savedCard.className.slice(14));
+        localStorage.setItem("saved-card", savedCard.className.slice(22));
         await axios.patch(`/users/liked/${username}/${propID}`);
       } else {
         console.log(propID);
@@ -214,6 +197,30 @@ const saveBtnEvent = async () => {
   });
 };
 
+const checkForSavedProps = () => {
+  setTimeout(async () => {
+    try {
+      const storedClassName = localStorage.getItem("saved-card");
+      const username = localStorage.getItem("username");
+      const res = await axios.get(`/users/liked_properties/${username}`);
+      const cardData = res.data[0];
+      if (storedClassName && username && cardData) {
+        const targetCards = document.querySelectorAll("#heart");
+        targetCards.forEach((card) => {
+          console.log(card);
+          const cardId = Number(card.querySelector(".prop-id").textContent);
+          console.log(cardData.liked_properties, cardId);
+          if (cardData.liked_properties.includes(cardId)) {
+            console.log("here");
+            card.classList.add(storedClassName);
+          }
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, 1500);
+};
 // selector drop down search shows properties by state
 const stateSelect = document.getElementById("by-state");
 stateSelect.addEventListener("change", async (e) => {
@@ -582,6 +589,9 @@ window.onclick = (event) => {
 // user logout
 const logoutLink = document.querySelector("#logout-link");
 logoutLink.addEventListener("click", () => {
+  if (!confirm("Are you Sure?")) {
+    return;
+  }
   localStorage.removeItem("token");
   localStorage.removeItem("username");
   location.reload();
@@ -606,3 +616,4 @@ const mobileMenuBar = document.querySelector("#toggle-menu");
 mobileMenuBar.addEventListener("click", () => {
   mobileNavItems.classList.toggle("active");
 });
+displayProperties();

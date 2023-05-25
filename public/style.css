@@ -35,9 +35,8 @@ body {
 .select {
   color: aqua;
   font-size: larger;
-  text-align: left;
+  text-align: center;
   width: 100%;
-  margin-left: 15px;
 }
 
 main {
@@ -73,6 +72,7 @@ a {
 }
 
 .nav-links .list-item {
+  font-size: 23px;
   display: inline-flex;
   color: aqua;
   cursor: pointer;
@@ -93,6 +93,9 @@ a {
   top: 1px;
   box-shadow: 0 3px 5px rgba(65, 192, 255, 0.54);
   border-radius: 50%;
+}
+.logo {
+  padding: 5px;
 }
 
 #home-link {
@@ -183,7 +186,7 @@ a {
   display: none;
   position: absolute;
   right: 10px;
-  top: 23px;
+  top: 30px;
 }
 .menu-line {
   width: 22px;
@@ -211,6 +214,7 @@ a {
   border: 1px solid black;
   border-radius: 10px;
   justify-content: center;
+  position: relative;
 }
 
 .property-card:hover {
@@ -232,34 +236,6 @@ a {
   border-radius: 10px 10px 0 0;
 }
 
-.save {
-  display: inline-block;
-  font: normal normal normal 16px/1 FontAwesome;
-  font-size: 23hgpx;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  position: absolute;
-  z-index: 5;
-  margin: 8px;
-  color: whitesmoke;
-  -webkit-text-stroke: 1px#000;
-}
-
-.save:hover {
-  transform: scale(1.2);
-  color: rgba(255, 0, 0, 0.21);
-}
-
-.save:active {
-  color: red;
-  opacity: 90%;
-}
-
-.saved {
-  color: red;
-}
-
 .price {
   color: whitesmoke;
   font-size: large;
@@ -270,7 +246,6 @@ a {
   flex-direction: row;
   justify-content: space-between;
 }
-
 .prop-id {
   display: none;
 }
@@ -286,6 +261,7 @@ a {
   border-top: 1px solid gray;
   width: 100%;
   text-align: center;
+  bottom: 0;
 }
 
 .property-card-footer a:visited {
@@ -294,6 +270,28 @@ a {
 
 .property-card-footer a:hover {
   box-shadow: 0 3px 5px rgba(33, 33, 33, 0.2);
+}
+.save {
+  display: inline-block;
+  font: normal normal normal 16px/1 FontAwesome;
+  font-size: 23hgpx;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: absolute;
+  z-index: 5;
+  margin: 8px;
+  color: whitesmoke;
+  -webkit-text-stroke: 1px#000;
+}
+
+.save:active {
+  color: red;
+  opacity: 90%;
+}
+
+.saved {
+  color: red;
 }
 
 /* The Modal (background) */
@@ -307,8 +305,7 @@ a {
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0, 0, 0); /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-
+  background-color: rgba(0, 0, 0, 0.8); /* Black w/ opacity */
   justify-content: center;
 }
 .bg {
@@ -340,125 +337,71 @@ a {
 
 /* Modal Content/Box */
 .modal-content {
+  z-index: 8;
+  color: whitesmoke;
   min-width: 240px;
-  max-width: 240px;
-  background-color: #fefefe;
+  max-width: 400px;
+  background-color: rgba(0, 0, 0, 0.739);
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
-  border: 1px solid black;
+  border: 1px solid aqua;
   border-radius: 10px;
   width: 20%; /* Could be more or less, depending on screen size */
 }
 
+.form-input {
+  display: flex;
+  width: 175px;
+  padding: 5px;
+  margin: 5px;
+  background-color: rgba(122, 211, 255, 0.663);
+  color: #000;
+  border-radius: 5px;
+  width: 75%;
+}
+
+::placeholder {
+  color: rgb(0, 0, 0);
+}
+
+.form-title {
+  padding-bottom: 10px;
+}
+
+.form-btn {
+  width: 75px;
+  height: 30px;
+  background-color: aqua;
+  border: 1px solid black;
+  border-radius: 5px;
+  color: black;
+  font-size: 17px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.form-btn:hover {
+  opacity: 80%;
+}
+
+.form-btn:active {
+  opacity: 50%;
+}
 /* The Close Button */
-.a-close {
+.x {
   color: #aaa;
   float: right;
   font-size: 28px;
   font-weight: bold;
 }
 
-.a-close:hover,
-.a-close:focus {
+.x:hover,
+.x:focus {
   color: black;
   text-decoration: none;
   cursor: pointer;
 }
 
-.d-close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.exit {
-  display: none;
-}
-
-#listing-form input {
-  display: flex;
-  width: 175px;
-  padding-bottom: 5px;
-  margin: 5px;
-}
-
-.d-close:hover,
-.d-close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.delete-listing-form input {
-  display: flex;
-  width: 175px;
-  padding-bottom: 5px;
-  margin: 5px;
-}
-
-.p-close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.p-close:hover,
-.p-close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.user-login-form input {
-  display: flex;
-  width: 175px;
-  padding-bottom: 5px;
-  margin: 5px;
-}
-
-.user-close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.user-close:hover,
-.user-close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.user-register-form input {
-  display: flex;
-  width: 175px;
-  padding-bottom: 5px;
-  margin: 5px;
-}
-
-.register-close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-#register-close:hover,
-#register-close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-#update-form input {
-  display: flex;
-  width: 175px;
-  padding-bottom: 5px;
-  margin: 5px;
-}
 /* footer */
 .footer {
   background: #000;
@@ -503,6 +446,10 @@ a {
   margin: 0% 1%;
 }
 @media (max-width: 900px) {
+  ::hover {
+    transform: none;
+    box-shadow: none;
+  }
   .nav {
     padding: 0;
     padding-top: 5px;
@@ -519,21 +466,33 @@ a {
 
   .nav-links .list-item {
     display: block;
-    border-top: 1px solid aqua;
     width: 100%;
     text-align: center;
   }
 
-  .list-item .dropdown {
-    display: none;
-    border-top: black;
+  .list-item {
+    border-top: 1px solid aqua;
   }
 
-  .list-item {
-    padding-bottom: 5px;
-  }
   #home-link {
     position: revert;
+    padding: 5px;
+  }
+
+  #saved-properties-link {
+    padding: 5px;
+  }
+
+  #register-link {
+    padding: 5px;
+  }
+
+  #login-link {
+    padding: 5px;
+  }
+
+  #logout-link {
+    padding: 5px;
   }
 
   .nav-links {
@@ -571,6 +530,11 @@ a {
     border-radius: 10px;
     font-size: x-small;
   }
+  .property-card:hover {
+    cursor: none;
+    box-shadow: none;
+    transform: none;
+  }
 
   #selected-property .property-card {
     width: 20rem;
@@ -580,10 +544,14 @@ a {
   #selected-property .property-card .price {
     font-size: 22px;
   }
+  .property-card-footer a:hover {
+    box-shadow: none;
+  }
 
   .footer {
     text-align: left;
     padding: 5%;
+    font-size: small;
   }
 
   .footer .row {
@@ -622,5 +590,27 @@ a {
 
   #selected-property .property-card .price {
     font-size: 20px;
+  }
+}
+
+@media (max-width: 370px) {
+  .slogan {
+    font-size: large;
+  }
+
+  .property-card {
+    width: 125px;
+    font-size: 10px;
+  }
+  .property-card .price {
+    font-size: 14px;
+  }
+  #selected-property .property-card {
+    width: 16rem;
+    font-size: 16px;
+  }
+
+  #selected-property .property-card .price {
+    font-size: 18px;
   }
 }
