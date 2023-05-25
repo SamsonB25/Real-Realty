@@ -7,7 +7,9 @@
 /* html body */
 body {
   font-family: Asap;
-  background-color: #2f2f2f;
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url(https://i.imgur.com/vg6CuRD.png);
+  filter: brightness(19px);
   background-position: top;
   background-repeat: no-repeat;
   background-size: cover;
