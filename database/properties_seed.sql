@@ -1,6 +1,6 @@
 INSERT INTO properties(realtors_id, states_id, street_address, city, zipcode, price, bed, bath, sqft, images, date_posted) 
 VALUES
-(1, 'AL', '123 Main St', 'Springfield', 12345, '$300,000', 3, 2, 1500,'/images/house1.jpg', '2022-01-01 12:00:00'),
+(1, 'AL', '123 Main St', 'Springfield', 12345, '$300,000', 3, 2, 1500,'https://i.imgur.com/I99gK8c.png', '2022-01-01 12:00:00'),
 (2, 'AK', '456 Elm St', 'Shelbyville', 67890, '$250,000', 4, 3, 2000, 'https://i.imgur.com/p7dOqLG.png', '2022-01-02 12:00:00'),
 (3, 'AZ', '789 Oak St', 'Capital City', 24680, '$500,000', 5, 4, 3000,'https://i.imgur.com/pfj6TYp.png', '2022-01-03 12:00:00'),
 (4, 'AR', '321 Pine St', 'Hill Valley', 13579, '$150,000', 2, 1, 1000,'https://i.imgur.com/ZvEKNVO.png', '2022-01-04 12:00:00'),

@@ -149,14 +149,15 @@ savedProperties.addEventListener("click", async () => {
               <p>${obj.bed} Bed  ${obj.bath} Bath   ${obj.sqft} Sqft
               </br>${obj.street_address}, ${obj.city}, ${obj.states_id} ${obj.zipcode}
               </br>${obj.date_posted}</p>
-                <div class="property-card-footer">
-                  Realtor:
-                  <a class="realtor-link" href="">
-                    ${obj.first_name} ${obj.last_name}
-                  </a>
-                </div>  
             </div>
           </div>`;
+      // footer being worked on
+      // <div class="property-card-footer">
+      //   Realtor:
+      //   <a class="realtor-link" href="">
+      //     ${obj.first_name} ${obj.last_name}
+      //   </a>
+      // </div>
       propertiesContainer.insertAdjacentHTML("afterbegin", html);
       saveBtnEvent();
       selectCard();
@@ -536,6 +537,21 @@ registerBtn.onclick = () => {
   const phone = document.querySelector("#register-phone").value;
   const email = document.querySelector("#register-email").value;
 
+  const phoneRegex = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
+  const emailRegex = /^.*@.*(\.com|\.org|\.gov)$/;
+
+  if (password.length < 5) {
+    return alert("Password must be longer than 5 characters.");
+  }
+
+  if (!phoneRegex.test(phone)) {
+    return alert("Enter valid phone number.");
+  }
+
+  if (!emailRegex.test(email)) {
+    return alert("Enter valid email.");
+  }
+
   const formData = {
     username: username,
     password: password,
@@ -551,13 +567,18 @@ registerBtn.onclick = () => {
     })
     .then((res) => {
       console.log(res.data);
+      if (res.data == "username taken") {
+        return alert("Username Already Exists.");
+      } else {
+        alert("User Created\nPlease Log In.");
+      }
+      location.reload();
     })
     .catch((error) => {
       alert("Username Already Exists.");
-      console.log(error.response);
       registerForm.reset();
+      return console.log(error.response);
     });
-  location.reload();
 };
 
 const userRegisterModal = document.querySelector("#user-register");
