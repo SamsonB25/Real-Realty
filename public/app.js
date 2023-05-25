@@ -54,12 +54,7 @@ const displayProperties = async () => {
       if (obj.images === null) {
         obj.images = "/images/no-image.jpg";
       }
-
-      if (obj.price.length >= 8) {
-        obj.price = obj.price.slice(0, 8);
-      } else if (obj.price.length >= 10) {
-        obj.price = obj.price.slice(0, 10);
-      }
+      obj.price = obj.price.split(".")[0];
       const html = `
         <div class="property-card">
           <div id ="heart" class="prop-id save fa-heart">
@@ -111,12 +106,12 @@ const selectCard = async () => {
       let card = obj.cloneNode(true);
       selectedProperty.style.display = "block";
       selectedProperty.appendChild(card);
-      window.onclick = (event) => {
+      window.addEventListener("click", (event) => {
         if (event.target == selectedProperty) {
           selectedProperty.style.display = "none";
           selectedProperty.innerHTML = "";
         }
-      };
+      });
     });
   });
 };
@@ -332,11 +327,11 @@ aSpan.onclick = () => {
 };
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = (event) => {
+window.addEventListener("click", (event) => {
   if (event.target == aListingModal) {
     aListingModal.style.display = "none";
   }
-};
+});
 
 // Delete listing code below
 
@@ -383,11 +378,11 @@ dSpan.onclick = () => {
 };
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = (event) => {
+window.addEventListener("click", (event) => {
   if (event.target == dListingModal) {
     dListingModal.style.display = "none";
   }
-};
+});
 
 // Update listing code below
 
@@ -452,7 +447,7 @@ listingPatchButton.onclick = async (e) => {
 };
 
 // display patch listing modal
-const pListingModal = document.getElementById("p-listing");
+const pListingModal = document.querySelector("#p-listing");
 const pListingBtn = document.getElementById("patch-listing");
 const pSpan = document.getElementsByClassName("p-close")[0];
 
@@ -467,11 +462,11 @@ pSpan.onclick = () => {
 };
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = (event) => {
+window.addEventListener("click", (event) => {
   if (event.target == pListingModal) {
     pListingModal.style.display = "none";
   }
-};
+});
 
 // end of crud features
 // start user management
@@ -526,11 +521,11 @@ userSpan.onclick = () => {
 };
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = (event) => {
+window.addEventListener("click", (event) => {
   if (event.target == userLoginModal) {
     userLoginModal.style.display = "none";
   }
-};
+});
 
 // user sign up
 const registerBtn = document.querySelector("#user-register-btn");
@@ -580,11 +575,11 @@ registerSpan.onclick = () => {
 };
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = (event) => {
+window.addEventListener("click", (event) => {
   if (event.target == userRegisterModal) {
     userRegisterModal.style.display = "none";
   }
-};
+});
 
 // user logout
 const logoutLink = document.querySelector("#logout-link");
@@ -615,5 +610,18 @@ const mobileNavItems = document.querySelector("#nav-list");
 const mobileMenuBar = document.querySelector("#toggle-menu");
 mobileMenuBar.addEventListener("click", () => {
   mobileNavItems.classList.toggle("active");
+});
+
+const mobileRealtyHub = document.querySelector(".dropdown");
+const hubItems = document.querySelector(".nav-buttons");
+const footer = document.querySelector(".footer");
+mobileRealtyHub.addEventListener("click", (e) => {
+  hubItems.style.display = "block";
+});
+
+window.addEventListener("click", (e) => {
+  if (e.target == propertiesContainer || e.target == footer) {
+    hubItems.style.display = "none";
+  }
 });
 displayProperties();
