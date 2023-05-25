@@ -106,7 +106,15 @@ const selectCard = async () => {
       let card = obj.cloneNode(true);
       selectedProperty.style.display = "block";
       selectedProperty.appendChild(card);
+      window.addEventListener("touchstart", (event) => {
+        event.stopPropagation();
+        if (event.target == selectedProperty) {
+          selectedProperty.style.display = "none";
+          selectedProperty.innerHTML = "";
+        }
+      });
       window.addEventListener("click", (event) => {
+        event.stopPropagation();
         if (event.target == selectedProperty) {
           selectedProperty.style.display = "none";
           selectedProperty.innerHTML = "";
@@ -203,11 +211,8 @@ const checkForSavedProps = () => {
       if (storedClassName && username && cardData) {
         const targetCards = document.querySelectorAll("#heart");
         targetCards.forEach((card) => {
-          console.log(card);
           const cardId = Number(card.querySelector(".prop-id").textContent);
-          console.log(cardData.liked_properties, cardId);
           if (cardData.liked_properties.includes(cardId)) {
-            console.log("here");
             card.classList.add(storedClassName);
           }
         });

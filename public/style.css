@@ -482,6 +482,9 @@ nav {
     position: revert;
     padding: 5px;
   }
+  .modal-content {
+    margin: 20% auto;
+  }
 
   #saved-properties-link {
     padding: 5px;
