@@ -172,17 +172,16 @@ const selectCard = async () => {
 
   const onlyTouch = (e) => {
     touchStarted = true;
-    console.log("tap");
+
     if (e.target == selectedProperty) {
       popOutCard.innerHTML = "";
-      return (selectedProperty.style.display = "none");
+      selectedProperty.style.display = "none";
     }
     e.stopPropagation();
   };
 
   const onlyClick = (e) => {
     if (!touchStarted) {
-      console.log("click");
       if (e.target == selectedProperty) {
         selectedProperty.style.display = "none";
         popOutCard.innerHTML = "";
@@ -202,7 +201,7 @@ const selectCard = async () => {
 
     obj.addEventListener("click", clickHandler);
 
-    obj.addEventListener(
+    window.addEventListener(
       "touchstart",
       (e) => {
         obj.removeEventListener("click", clickHandler);
@@ -215,6 +214,7 @@ const selectCard = async () => {
       obj.addEventListener("click", clickHandler);
     });
   });
+
   window.addEventListener("click", onlyClick, false);
 };
 
