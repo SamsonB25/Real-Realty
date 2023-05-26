@@ -196,7 +196,7 @@ const selectCard = async () => {
       let card = obj.cloneNode(true);
       selectedProperty.style.display = "block";
       popOutCard.appendChild(card);
-      saveBtnEvent();
+      return saveBtnEvent();
     };
 
     obj.addEventListener("click", clickHandler);
