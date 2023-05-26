@@ -160,26 +160,46 @@ const propertyCardTimer = async () => {
 };
 
 // pops out selected card
+const modal = document.querySelector(".modal");
 const selectCard = async () => {
   const propertyCards = document.querySelectorAll(".property-card");
-  const selectedProperty = document.querySelector("#selected-property.modal");
+  const popOutCard = document.querySelector("#selected-property");
+  const selectedProperty = document.querySelector("#selected");
   propertyCards.forEach((obj) => {
-    obj.addEventListener("click" || "touchstart", () => {
+    obj.addEventListener("click", (e) => {
       let card = obj.cloneNode(true);
       selectedProperty.style.display = "block";
-      selectedProperty.appendChild(card);
+      popOutCard.appendChild(card);
       saveBtnEvent();
-      window.addEventListener("click" || "touchstart", (event) => {
-        event.stopPropagation();
-        if (event.target == selectedProperty) {
-          selectedProperty.style.display = "none";
-          selectedProperty.innerHTML = "";
-        }
-      });
     });
   });
-};
+  const touch = () => {
+    window.addEventListener(
+      "touch",
+      (event) => {
+        console.log("touch");
+        if (event.target == selectedProperty) {
+          selectedProperty.style.display = "none";
+          popOutCard.innerHTML = "";
+        }
+      },
+      false
+    );
+  };
 
+  const click = () => {
+    window.addEventListener("click", (event) => {
+      if (event.target == selectedProperty) {
+        selectedProperty.style.display = "none";
+        popOutCard.innerHTML = "";
+      }
+      console.log("click");
+    });
+  };
+  if (!touch()) {
+    click();
+  }
+};
 // displays properties users has saved
 const savedProperties = document.querySelector("#saved-properties-link"); // almost complete
 savedProperties.addEventListener("click", async () => {
