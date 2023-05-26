@@ -1,5 +1,6 @@
 const propertiesContainer = document.getElementById("properties-container");
 const stateSelect = document.querySelector(".select");
+const pageContainer = document.querySelector("#page-constainer");
 
 // start of data fetching
 async function getproperties() {
@@ -161,45 +162,62 @@ const propertyCardTimer = async () => {
 
 // pops out selected card
 const modal = document.querySelector(".modal");
+const selectedProperty = document.querySelector("#selected");
+const popOutCard = document.querySelector("#selected-property");
+
 const selectCard = async () => {
   const propertyCards = document.querySelectorAll(".property-card");
-  const popOutCard = document.querySelector("#selected-property");
-  const selectedProperty = document.querySelector("#selected");
+
+  let touchStarted = false;
+
+  const onlyTouch = (e) => {
+    touchStarted = true;
+    console.log("tap");
+    if (e.target == selectedProperty) {
+      popOutCard.innerHTML = "";
+      return (selectedProperty.style.display = "none");
+    }
+    e.stopPropagation();
+  };
+
+  const onlyClick = (e) => {
+    if (!touchStarted) {
+      console.log("click");
+      if (e.target == selectedProperty) {
+        selectedProperty.style.display = "none";
+        popOutCard.innerHTML = "";
+      }
+      e.preventDefault();
+    }
+    touchStarted = false;
+  };
+
   propertyCards.forEach((obj) => {
-    obj.addEventListener("click", (e) => {
+    const clickHandler = (e) => {
       let card = obj.cloneNode(true);
       selectedProperty.style.display = "block";
       popOutCard.appendChild(card);
       saveBtnEvent();
+    };
+
+    obj.addEventListener("click", clickHandler);
+
+    obj.addEventListener(
+      "touchstart",
+      (e) => {
+        obj.removeEventListener("click", clickHandler);
+        onlyTouch(e);
+      },
+      { passive: false }
+    );
+
+    obj.addEventListener("touchend", () => {
+      obj.addEventListener("click", clickHandler);
     });
   });
-  const touch = () => {
-    window.addEventListener(
-      "touch",
-      (event) => {
-        console.log("touch");
-        if (event.target == selectedProperty) {
-          selectedProperty.style.display = "none";
-          popOutCard.innerHTML = "";
-        }
-      },
-      false
-    );
-  };
-
-  const click = () => {
-    window.addEventListener("click", (event) => {
-      if (event.target == selectedProperty) {
-        selectedProperty.style.display = "none";
-        popOutCard.innerHTML = "";
-      }
-      console.log("click");
-    });
-  };
-  if (!touch()) {
-    click();
-  }
+  window.addEventListener("click", onlyClick, false);
 };
+
 // displays properties users has saved
 const savedProperties = document.querySelector("#saved-properties-link"); // almost complete
 savedProperties.addEventListener("click", async () => {
