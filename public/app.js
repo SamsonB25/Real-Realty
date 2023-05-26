@@ -1,4 +1,5 @@
 const propertiesContainer = document.getElementById("properties-container");
+const stateSelect = document.querySelector(".select");
 
 // start of data fetching
 async function getproperties() {
@@ -7,7 +8,7 @@ async function getproperties() {
     const data = response.data;
     return data;
   } catch (error) {
-    console.error(err);
+    console.error(err.response.data);
   }
 }
 
@@ -17,7 +18,7 @@ async function getPropertiesByState(stateID) {
     const data = response.data;
     return data;
   } catch (err) {
-    console.error(err);
+    console.error(err.response.data);
   }
 }
 
@@ -26,26 +27,30 @@ async function getRealtors() {
     const response = await axios.get("/realtors");
     const data = response.data;
     return data;
-  } catch (error) {}
+  } catch (error) {
+    console.error(err.response.data);
+  }
 }
 // gets specific realtors
 async function getRealtor(id) {
   try {
     const response = await axios.get(`/realtor/${id}`);
     const data = response.data;
-    console.log(data);
+
     return data;
   } catch (error) {
-    console.error(err);
+    console.error(err.response.data);
   }
 }
 
 // end of data fetching
 // start of display features
 
+// displays all properties
 const displayProperties = async () => {
   try {
     const propertyData = await getproperties();
+    stateSelect.style.display = "revert";
     propertyData.forEach((obj) => {
       obj.date_posted = luxon.DateTime.fromISO(obj.date_posted).toFormat(
         "dd LLL yyyy"
@@ -82,13 +87,69 @@ const displayProperties = async () => {
     checkForSavedProps();
     selectCard();
     saveBtnEvent();
-  } catch (error) {}
+  } catch (error) {
+    console.error(err.response.data);
+  }
 };
 
+// home screen loads all properties
 const home = document.querySelector("#home-link");
 home.addEventListener("click", async () => {
   propertiesContainer.innerHTML = "";
   displayProperties();
+});
+
+// selector drop down search shows properties by state
+stateSelect.addEventListener("change", async (e) => {
+  try {
+    propertiesContainer.innerHTML = "";
+    const selectedState = e.target.value;
+    if (selectedState === "US") {
+      return displayProperties();
+    }
+    const displayState = await getPropertiesByState(selectedState);
+    if (displayState == null) {
+      const noProps = document.createElement("div");
+      noProps.className = "no-props";
+      noProps.textContent = "No Properties In This State";
+      return propertiesContainer.appendChild(noProps);
+    }
+    displayState.forEach((obj) => {
+      obj.date_posted = luxon.DateTime.fromISO(obj.date_posted).toFormat(
+        "dd LLL yyyy"
+      );
+      if (obj.images === null) {
+        obj.images = "/images/no-image.jpg";
+      }
+      obj.price = obj.price.split(".")[0];
+      const html = `
+    <div class="property-card">
+      <div class="property-img">
+      <div id = "heart" class="save fa-heart"></div>
+        <img src="${obj.images}">
+      </div>
+      <div class="property-info">
+        <div class="price id">${obj.price}<div class="prop-id">${obj.property_id}</div></div>
+        <p>${obj.bed} Bed  ${obj.bath} Bath   ${obj.sqft} Sqft
+        </br>${obj.street_address}, ${obj.city}, ${obj.state_id} ${obj.zipcode}
+        </br>${obj.date_posted}</p>
+          <div class="property-card-footer">
+            Realtor:
+            <a class="realtor-link" href="">
+               ${obj.first_name} ${obj.last_name}
+            </a>
+          </div>  
+      </div>
+    </div>`;
+      propertiesContainer.insertAdjacentHTML("afterbegin", html);
+    });
+    propertyCardTimer();
+    saveBtnEvent();
+    checkForSavedProps();
+    selectCard();
+  } catch (err) {
+    console.error(err.message);
+  }
 });
 
 // allows for the property card to be loaded in from dom
@@ -98,22 +159,17 @@ const propertyCardTimer = async () => {
   }, 1000);
 };
 
+// pops out selected card
 const selectCard = async () => {
   const propertyCards = document.querySelectorAll(".property-card");
-  const selectedProperty = document.querySelector("#selected-property");
+  const selectedProperty = document.querySelector("#selected-property.modal");
   propertyCards.forEach((obj) => {
-    obj.addEventListener("click", () => {
+    obj.addEventListener("click" || "touchstart", () => {
       let card = obj.cloneNode(true);
       selectedProperty.style.display = "block";
       selectedProperty.appendChild(card);
-      window.addEventListener("touchstart", (event) => {
-        event.stopPropagation();
-        if (event.target == selectedProperty) {
-          selectedProperty.style.display = "none";
-          selectedProperty.innerHTML = "";
-        }
-      });
-      window.addEventListener("click", (event) => {
+      saveBtnEvent();
+      window.addEventListener("click" || "touchstart", (event) => {
         event.stopPropagation();
         if (event.target == selectedProperty) {
           selectedProperty.style.display = "none";
@@ -124,18 +180,20 @@ const selectCard = async () => {
   });
 };
 
-// home screen loads all properties
-// clicking logo also shows all properties
-
 // displays properties users has saved
 const savedProperties = document.querySelector("#saved-properties-link"); // almost complete
 savedProperties.addEventListener("click", async () => {
   propertiesContainer.innerHTML = "";
   try {
+    const noProps = document.createElement("div");
+    noProps.className = "no-props";
+    noProps.textContent = "No Saved Properties!";
+    propertiesContainer.appendChild(noProps);
     const res = await axios.get(
       `/users/liked_properties/${localStorage.getItem("username")}`
     );
     const savedProperties = res.data;
+    propertiesContainer.innerHTML = "";
     savedProperties.forEach((obj) => {
       obj.date_posted = luxon.DateTime.fromISO(obj.date_posted).toFormat(
         "dd LLL yyyy"
@@ -144,6 +202,8 @@ savedProperties.addEventListener("click", async () => {
       if (obj.images === null) {
         obj.images = "/images/no-image.jpg";
       }
+
+      obj.price = obj.price.split(".")[0];
       const html = `
           <div class="property-card">
             <div class="property-img">
@@ -167,15 +227,18 @@ savedProperties.addEventListener("click", async () => {
       //   </a>
       // </div>
       propertiesContainer.insertAdjacentHTML("afterbegin", html);
-      saveBtnEvent();
-      selectCard();
-      checkForSavedProps();
     });
+    checkForSavedProps();
+    selectCard();
+    saveBtnEvent();
   } catch (error) {
     console.error(error);
   }
 });
 
+// saves card id to db and turns heart red
+//also stores saved classname to localstorage for later use
+localStorage.setItem("saved-card", "saved");
 const saveBtnEvent = async () => {
   const propertyCards = document.querySelectorAll(".property-card");
   propertyCards.forEach((propertyCard) => {
@@ -189,12 +252,9 @@ const saveBtnEvent = async () => {
       const propID = Number(propertyCard.querySelector(".prop-id").textContent);
       const saved = savePropertyBtn.classList.toggle("saved");
       if (saved) {
-        const savedCard = document.getElementById("heart");
-        savedCard.classList.add("saved");
-        localStorage.setItem("saved-card", savedCard.className.slice(22));
+        savePropertyBtn.classList.add("saved");
         await axios.patch(`/users/liked/${username}/${propID}`);
       } else {
-        console.log(propID);
         await axios.patch(`/users/remove/${username}/${propID}`);
       }
     });
@@ -222,50 +282,6 @@ const checkForSavedProps = () => {
     }
   }, 1500);
 };
-// selector drop down search shows properties by state
-const stateSelect = document.getElementById("by-state");
-stateSelect.addEventListener("change", async (e) => {
-  try {
-    propertiesContainer.innerHTML = "";
-    const selectedState = e.target.value;
-    const displayState = await getPropertiesByState(selectedState);
-    displayState.forEach((obj) => {
-      console.log(obj);
-      obj.date_posted = luxon.DateTime.fromISO(obj.date_posted).toFormat(
-        "dd LLL yyyy"
-      );
-
-      if (obj.images === null) {
-        obj.images = "/images/no-image.jpg";
-      }
-      const html = `
-    <div class="property-card">
-      <div class="property-img">
-      <div id = "heart" class="save fa-heart"></div>
-        <img src="${obj.images}">
-      </div>
-      <div class="property-info">
-        <div class="price id">${obj.price}<div class="prop-id">${obj.property_id}</div></div>
-        <p>${obj.bed} Bed  ${obj.bath} Bath   ${obj.sqft} Sqft
-        </br>${obj.street_address}, ${obj.city}, ${obj.state_id} ${obj.zipcode}
-        </br>${obj.date_posted}</p>
-          <div class="property-card-footer">
-            Realtor:
-            <a class="realtor-link" href="">
-               ${obj.first_name} ${obj.last_name}
-            </a>
-          </div>  
-      </div>
-    </div>`;
-      propertiesContainer.insertAdjacentHTML("afterbegin", html);
-    });
-    await propertyCardTimer();
-  } catch (err) {
-    console.error(err);
-  }
-});
-
-// displays selected properties in a modal
 
 // start crud features
 // Add listing code below
@@ -273,46 +289,43 @@ stateSelect.addEventListener("change", async (e) => {
 const listingForm = document.querySelector("#listing-form");
 const listingSubmitButton = document.getElementById("submit-listing");
 listingSubmitButton.onclick = async (e) => {
-  e.preventDefault();
-  const streetAddress = document.querySelector("#street-address").value;
-  const city = document.querySelector("#city").value;
-  const stateId = document.querySelector("#state-id").value.toUpperCase();
-  const zipcode = document.querySelector("#zipcode").value;
-  const price = document.querySelector("#price").value;
-  const bed = document.querySelector("#bed").value;
-  const bath = document.querySelector("#bath").value;
-  const sqft = document.querySelector("#sqft").value;
-  const image = document.querySelector("#img").value;
-  const realtorId = document.querySelector("#realtor-id").value;
+  try {
+    e.preventDefault();
+    const streetAddress = document.querySelector("#street-address").value;
+    const city = document.querySelector("#city").value;
+    const stateId = document.querySelector("#state-id").value.toUpperCase();
+    const zipcode = document.querySelector("#zipcode").value;
+    const price = document.querySelector("#price").value;
+    const bed = document.querySelector("#bed").value;
+    const bath = document.querySelector("#bath").value;
+    const sqft = document.querySelector("#sqft").value;
+    const image = document.querySelector("#img").value;
+    const realtorId = document.querySelector("#realtor-id").value;
 
-  const formData = {
-    street_address: streetAddress,
-    city: city,
-    states_id: stateId,
-    zipcode: zipcode,
-    price: price,
-    bed: bed,
-    bath: bath,
-    sqft: sqft,
-    images: image,
-    realtors_id: realtorId,
-  };
+    const formData = {
+      street_address: streetAddress,
+      city: city,
+      states_id: stateId,
+      zipcode: zipcode,
+      price: price,
+      bed: bed,
+      bath: bath,
+      sqft: sqft,
+      images: image,
+      realtors_id: realtorId,
+    };
 
-  if (formData.images === "") {
-    formData.images = null;
-  }
-  axios
-    .post("/properties", formData, console.log(formData), {
+    if (formData.images === "") {
+      formData.images = null;
+    }
+    const res = await axios.post("/properties", formData, {
       headers: {
         "Content-Type": "application/json",
       },
-    })
-    .then((res) => {
-      console.log(res.data);
-    })
-    .catch((error) => {
-      console.log(error.response);
     });
+  } catch (error) {
+    console.error(error.response.data);
+  }
   listingForm.reset();
   location.reload();
 };
@@ -333,7 +346,7 @@ aSpan.onclick = () => {
 };
 
 // When the user clicks anywhere outside of the modal, close it
-window.addEventListener("click", (event) => {
+window.addEventListener("click" || "touchstart", (event) => {
   if (event.target == aListingModal) {
     aListingModal.style.display = "none";
   }
@@ -345,27 +358,32 @@ const delForm = document.querySelector(".delete-listing-form");
 const listingRemoveButton = document.querySelector("#remove-listing");
 listingRemoveButton.onclick = async (e) => {
   e.preventDefault();
-  const streetAddress = document.querySelector("#d-street-address").value;
-  const city = document.querySelector("#d-city").value;
-  const stateId = document.querySelector("#d-state-id").value.toUpperCase();
+  try {
+    const streetAddress = document.querySelector("#d-street-address").value;
+    const city = document.querySelector("#d-city").value;
+    const stateId = document.querySelector("#d-state-id").value.toUpperCase();
 
-  const formData = {
-    street_address: streetAddress,
-    city: city,
-    states_id: stateId,
-  };
-
-  axios
-    .delete(`/properties/${streetAddress}/${city}/${stateId}`, formData)
-    .then((res) => {
-      alert(`Removed Property Located at:\n
+    const formData = {
+      street_address: streetAddress,
+      city: city,
+      states_id: stateId,
+    };
+    if (!streetAddress || !city || !stateId) {
+      return alert("Fill Required Fields");
+    }
+    const response = axios.delete(
+      `/properties/${streetAddress}/${city}/${stateId}`,
+      formData
+    );
+    if (response.name == "AxiosError") {
+      return alert("No Property At This Location");
+    }
+    alert(`Removed Property Located at:\n
       ${formData.street_address},${formData.city} ${formData.states_id}`);
-      console.log(res);
-    })
-    .catch((error) => {
-      console.log(error.response.data.Error);
-    });
-  location.reload();
+  } catch (error) {
+    console.error(error.response);
+  }
+  // location.reload();
   delForm.reset();
 };
 
@@ -384,7 +402,7 @@ dSpan.onclick = () => {
 };
 
 // When the user clicks anywhere outside of the modal, close it
-window.addEventListener("click", (event) => {
+window.addEventListener("click" || "touchstart", (event) => {
   if (event.target == dListingModal) {
     dListingModal.style.display = "none";
   }
@@ -468,7 +486,7 @@ pSpan.onclick = () => {
 };
 
 // When the user clicks anywhere outside of the modal, close it
-window.addEventListener("click", (event) => {
+window.addEventListener("click" || "touchstart", (event) => {
   if (event.target == pListingModal) {
     pListingModal.style.display = "none";
   }
@@ -527,7 +545,7 @@ userSpan.onclick = () => {
 };
 
 // When the user clicks anywhere outside of the modal, close it
-window.addEventListener("click", (event) => {
+window.addEventListener("click" || "touchstart", (event) => {
   if (event.target == userLoginModal) {
     userLoginModal.style.display = "none";
   }
@@ -601,7 +619,7 @@ registerSpan.onclick = () => {
 };
 
 // When the user clicks anywhere outside of the modal, close it
-window.addEventListener("click", (event) => {
+window.addEventListener("click" || "touchstart", (event) => {
   if (event.target == userRegisterModal) {
     userRegisterModal.style.display = "none";
   }
@@ -632,20 +650,29 @@ if (localStorage.getItem("token")) {
   savedProperties.style.display = "none";
 }
 
+const listItem = document.querySelectorAll(".list-item");
 const mobileNavItems = document.querySelector("#nav-list");
 const mobileMenuBar = document.querySelector("#toggle-menu");
-mobileMenuBar.addEventListener("click", () => {
+mobileMenuBar.addEventListener("click" || "touchstart", (e) => {
+  console.log(e);
   mobileNavItems.classList.toggle("active");
+});
+listItem.forEach((item) => {
+  item.addEventListener("click" || "touchstart", (e) => {
+    if (e.target != mobileMenuBar) {
+      mobileNavItems.classList.remove("active");
+    }
+  });
 });
 
 const mobileRealtyHub = document.querySelector(".dropdown");
 const hubItems = document.querySelector(".nav-buttons");
 const footer = document.querySelector(".footer");
-mobileRealtyHub.addEventListener("click", (e) => {
+mobileRealtyHub.addEventListener("click" || "touchstart", (e) => {
   hubItems.style.display = "block";
 });
 
-window.addEventListener("click", (e) => {
+window.addEventListener("click" || "touchstart", (e) => {
   if (e.target == propertiesContainer || e.target == footer) {
     hubItems.style.display = "none";
   }

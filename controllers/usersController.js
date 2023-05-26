@@ -52,7 +52,7 @@ export const createUser = async (req, res) => {
         user.phone,
         user.email,
       ]);
-      console.log(results.rows[0]);
+
       return res.status(201).json("User Created");
     }
     if (usernameChecks.rows[0].username === user.username) {
@@ -113,8 +113,7 @@ export const sendLikedProperty = async (req, res) => {
     const username = req.params.username;
     const propertyID = Number(req.params.propertyID);
     const results = await db.query(likeProperty, [propertyID, username]);
-    console.log(results);
-    console.log(req.body);
+
     res.status(202).json(results.rows[0]);
   } catch (error) {
     console.error(error);

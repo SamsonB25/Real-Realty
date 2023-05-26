@@ -9,7 +9,6 @@ import {
   propertiesWithRealtors,
   updateProperty,
 } from "./queries.js";
-import { DateTime } from "luxon";
 
 export const getAllProperties = async (req, res) => {
   try {
@@ -64,7 +63,7 @@ export const getPropertiesBystates = async (req, res) => {
     }
     res.status(200).json(results.rows);
   } catch (err) {
-    console.error(err);
+    console.error(err.message);
     res.status(500).json({ Error: "Error retrieving properties." });
   }
 };
@@ -154,7 +153,7 @@ export const updateProperties = async (req, res) => {
       images,
     ]);
     if (res.rowCount === 0) {
-      res.status(304).json("not real");
+      return res.status(304).json("not real");
     }
     res.status(202).json(results.rows[0]);
 
@@ -175,6 +174,9 @@ export const deleteProperties = async (req, res) => {
       city,
       statesId,
     ]);
+    if (results.rowCount === 0) {
+      return res.status(404).json({ Error: "Property Doesn't Exist" });
+    }
     res.status(200).json(results.rows[0]);
   } catch (err) {
     console.error(err);

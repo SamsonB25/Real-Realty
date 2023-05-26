@@ -316,31 +316,23 @@ nav {
   background-color: rgba(0, 0, 0, 0.8); /* Black w/ opacity */
   justify-content: center;
 }
-.bg {
-  filter: blur(12px);
-  -webkit-filter: blur(12px);
-  z-index: 100;
 
-  /* Full height */
-  height: 100%;
-
-  /* Center and scale the image nicely */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
 #selected-property .property-card {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 60;
+  z-index: 1005;
   width: 32rem;
   font-size: 40px;
 }
 
 #selected-property .property-card .price {
   font-size: 45px;
+}
+
+#selected-property .property-card #heart {
+  font-size: 30px;
 }
 
 /* Modal Content/Box */
@@ -369,7 +361,7 @@ nav {
 }
 
 ::placeholder {
-  color: rgb(0, 0, 0);
+  color: rgb(210, 210, 210);
 }
 
 .form-title {
@@ -408,6 +400,13 @@ nav {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+.no-props {
+  color: whitesmoke;
+  font-size: 35px;
+  margin: auto;
+  padding-top: 125px;
 }
 
 /* footer */
@@ -453,6 +452,17 @@ nav {
   font-size: 2em;
   margin: 0% 1%;
 }
+@media (min-width: 2940px) {
+  #properties-container {
+    padding-bottom: 25rem;
+  }
+}
+@media (min-width: 4465px) {
+  #properties-container {
+    padding-bottom: 40rem;
+  }
+}
+
 @media (max-width: 900px) {
   .nav {
     padding: 0;
@@ -461,6 +471,9 @@ nav {
 
   #logo {
     max-width: 60px;
+  }
+  .no-props {
+    font-size: xx-large;
   }
   .nav-items {
     display: block;
@@ -587,7 +600,7 @@ nav {
     margin: 0% 3%;
   }
 }
-@media (max-width: 440px) {
+@media (max-width: 480px) {
   .slogan {
     font-size: larger;
   }
@@ -608,6 +621,10 @@ nav {
 @media (max-width: 370px) {
   .slogan {
     font-size: large;
+  }
+
+  .no-props {
+    font-size: x-large;
   }
 
   .property-card {
